@@ -49,21 +49,21 @@ export default function GitHubCalendarSection(): JSX.Element {
               target="_blank"
               rel="noopener noreferrer"
               className="
-              font-dm 
-              text-xs text-muted-foreground
-              transition-all
-              hover:font-semibold
-            hover:text-[#6D65FF]
-              hover:underline
-              cursor-pointer
-            "
+                font-dm 
+                text-xs text-muted-foreground
+                transition-all
+                hover:font-semibold
+                hover:text-[#6D65FF]
+                hover:underline
+                cursor-pointer
+              "
             >
               @{username}
               <span className="ml-1 text-xs">↗</span>
             </a>
           </div>
 
-          <div className="calendar w-full max-w-[960px] mx-auto text-[12px] text-muted-foreground">
+          <div className="calendar github-calendar w-full max-w-[960px] mx-auto text-[12px] text-muted-foreground">
             Loading GitHub activity…
           </div>
         </Card>

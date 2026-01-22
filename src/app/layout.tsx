@@ -1,3 +1,4 @@
+import { Footer } from "@/components/Footer";
 import NavBarServer from "@/components/NavBarServer";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
@@ -25,6 +26,7 @@ export default function RootLayout({
         {" "}
         <NavBarServer />
         {children}
+        <Footer />
       </body>
     </html>
   );

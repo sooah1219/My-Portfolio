@@ -102,8 +102,8 @@ function SkillList({ list }: { list: Skill[] }) {
 
 const HERO_LINES = [
   "<Hello, I'm Sooah! ✋ >",
-  "<full-stack developer>",
-  "<turning concepts into real products.>",
+  "<full stack developer >",
+  "<turning concepts into real products. >",
 ];
 
 export default function HeroWithSkills() {
@@ -159,7 +159,7 @@ export default function HeroWithSkills() {
           <Card className="px-4 py-10 flex flex-col items-center gap-6 sm:min-h-[400px]">
             <motion.div
               className="relative w-32 h-32 md:w-36 md:h-36 rounded-full mb-5 overflow-hidden shadow-[0_0_15px_5px_#6D65FF]/30"
-              animate={{ y: [0, -6, 0] }}
+              animate={{ y: [0, -10, 0] }}
               transition={{
                 duration: 4,
                 repeat: Infinity,

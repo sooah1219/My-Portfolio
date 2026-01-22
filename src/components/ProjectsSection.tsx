@@ -16,7 +16,6 @@ export function ProjectsSection() {
   return (
     <section className="w-full flex justify-center mt-10 px-4">
       <div className="max-w-6xl w-full">
-        {/* Section header */}
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
@@ -37,7 +36,6 @@ export function ProjectsSection() {
           </Link>
         </div>
 
-        {/* Project cards */}
         <div className="grid gap-6 md:grid-cols-3">
           {projects.map((project) => (
             <Link
