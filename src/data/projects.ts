@@ -15,13 +15,7 @@ export const projects: Project[] = [
     slug: "forge-career-explorer",
     title: "Forge – Career Exploration App",
     thumbnail: "/images/forge.png",
-    techStack: [
-      "React Native",
-      "TypeScript",
-      "Bun/Hono",
-      "PostgreSQL",
-      "Clerk",
-    ],
+    techStack: ["React Native", "TypeScript", "PostgreSQL", "Clerk", "Vercel"],
     summary:
       "Mobile app that helps high school students explore trades careers using conversational AI, gamified pathways, and real data from SkilledTradesBC.",
     platform: "Mobile",
@@ -29,9 +23,16 @@ export const projects: Project[] = [
   {
     id: "2",
     slug: "lenditout-marketplace",
-    title: "LendItOut – Lending Marketplace",
+    title: "LendItOut – Lending Marketplace App",
     thumbnail: "/images/lenditout.png",
-    techStack: ["React", "TypeScript", "Express", "MongoDB"],
+    techStack: [
+      "HTML",
+      "TypeScript",
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "Render",
+    ],
     summary:
       "Web platform for lending and borrowing items in the community with listing management, categories, and search.",
     platform: "Mobile",
@@ -39,11 +40,35 @@ export const projects: Project[] = [
   {
     id: "3",
     slug: "live-order-platform",
-    title: "Live Order Platform for Tenton",
-    thumbnail: "/images/order.png",
-    techStack: ["Next.js", "TypeScript", "PostgreSQL", "AWS"],
+    title: "Tenton Ramen - Live Order Platform",
+    thumbnail: "/images/ramen2.png",
+    techStack: [
+      "React",
+      "TypeScript",
+      "Next.js",
+      "PostgreSQL",
+      "Clerk",
+      "Vercel",
+    ],
     summary:
-      "Internal order dashboard for a ramen & sushi restaurant, supporting real-time order tracking and smoother kitchen workflows.",
+      "Customer-facing restaurant web app where guests can browse the menu, make reservations, and place live orders. Supports dine-in and take-out with real-time order status, reducing phone calls and improving order accuracy.",
+    platform: "Web",
+  },
+  {
+    id: "4",
+    slug: "community-of-guardians",
+    title: "Community of Guardians – Social Impact Platform",
+    thumbnail: "/images/cog.png",
+    techStack: [
+      "React",
+      "TypeScript",
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "AWS",
+    ],
+    summary:
+      "Social platform built around the UN Sustainable Development Goals, featuring daily quests, community actions, badges, and social engagement features.",
     platform: "Web",
   },
 ];

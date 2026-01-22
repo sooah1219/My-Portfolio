@@ -123,7 +123,116 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+
+/* GitHub Calendar Override: DM Sans + 보라톤 */
+/* ---------- GitHub Calendar – Sooah 포트폴리오 커스텀 ---------- */
+
+/* 1) 폰트: DM Sans (이미 --font-sans가 DM Sans로 매핑되어 있으니까 이걸 그대로 사용) */
+.calendar * {
+  font-family: var(--font-sans) !important;
+}
+
+/* 2) heatmap 색상 – 보라톤 팔레트 (light) */
+.calendar svg rect[data-level="0"] {
+  fill: #f5f4ff !important;
+  /* 거의 안 한 날 */
+}
+
+.calendar svg rect[data-level="1"] {
+  fill: #e7e6ff !important;
+}
+
+.calendar svg rect[data-level="2"] {
+  fill: #c6c4ff !important;
+}
+
+.calendar svg rect[data-level="3"] {
+  fill: #a09bff !important;
+}
+
+.calendar svg rect[data-level="4"] {
+  fill: #6d65ff !important;
+  /* 메인 포트폴리오 보라 */
+}
+
+/* 3) 다크 모드용 보라톤 (배경 어두울 때 조금 더 진하게) */
+.dark .calendar svg rect[data-level="0"] {
+  fill: #1f1c3a !important;
+}
+
+.dark .calendar svg rect[data-level="1"] {
+  fill: #2b2754 !important;
+}
+
+.dark .calendar svg rect[data-level="2"] {
+  fill: #3a3572 !important;
+}
+
+.dark .calendar svg rect[data-level="3"] {
+  fill: #514aa0 !important;
+}
+
+.dark .calendar svg rect[data-level="4"] {
+  fill: #6d65ff !important;
+}
+
+/* 4) heatmap 모양 – 둥근 네모 + 살짝 크게 + hover 애니메이션 */
+.calendar svg rect[data-level] {
+  rx: 3px;
+  ry: 3px;
+  width: 11px;
+  height: 11px;
+  shape-rendering: geometricPrecision;
+  transition:
+    transform 150ms ease-out,
+    stroke 150ms ease-out,
+    fill 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+
+.calendar svg rect[data-level]:hover {
+  transform: scale(1.25);
+  stroke: #4e47ce;
+  stroke-width: 1;
+  box-shadow: 0 0 8px rgba(109, 101, 255, 0.6);
+}
+
+/* 5) tooltip 스타일 (기여도 위에 뜨는 박스) – 깔끔한 카드 느낌 */
+.calendar .svg-tip {
+  background-color: #111827 !important;
+  /* slate-900 */
+  color: #f9fafb !important;
+  /* slate-50 */
+  border-radius: 0.5rem !important;
+  padding: 0.45rem 0.7rem !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.45) !important;
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+}
+
+.dark .calendar .svg-tip {
+  background-color: #f9fafb !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.6) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+/* 6) legend / footer 정리 – 밑의 “Less / More / 푸터 텍스트” 제거해서 더 깔끔하게 */
+.calendar .contrib-legend,
+.calendar .contrib-footer {
+  display: none !important;
+}
+
+/* 7) 캘린더 안 텍스트(월/요일 라벨 등) 살짝 정리 */
+.calendar text {
+  fill: color-mix(in srgb, var(--muted-foreground) 70%, #6b7280 30%) !important;
+  font-size: 11px !important;
 }

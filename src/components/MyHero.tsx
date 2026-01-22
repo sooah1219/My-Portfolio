@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { skills } from "@/data/skill";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 
@@ -33,6 +33,27 @@ const levelStyles: Record<Level, { wrapper: string; label: string }> = {
   },
 };
 
+const listVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+  },
+};
+
+const badgeVariants: Variants = {
+  hidden: { opacity: 0, y: 6, scale: 0.96 },
+  visible: (order: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.45,
+      ease: "easeOut",
+      delay: order * 0.07,
+    },
+  }),
+};
+
 type SkillBadgeProps = {
   name: string;
   level: Level;
@@ -47,6 +68,35 @@ function SkillBadge({ name, level }: SkillBadgeProps) {
     >
       <span className="text-[11px] md:text-[11px]">{name}</span>
     </span>
+  );
+}
+
+function SkillList({ list }: { list: Skill[] }) {
+  const [randomOrder] = useState(() =>
+    list.map((_, idx) => idx).sort(() => Math.random() - 0.5)
+  );
+
+  return (
+    <motion.ul
+      variants={listVariants}
+      initial="hidden"
+      animate="visible"
+      className="flex flex-wrap gap-2 justify-center mt-0 md:mt-3"
+    >
+      {list.map((s, idx) => {
+        const order = randomOrder[idx] ?? idx;
+        return (
+          <motion.li
+            key={s.name}
+            variants={badgeVariants}
+            custom={order}
+            className="list-none"
+          >
+            <SkillBadge name={s.name} level={s.level} />
+          </motion.li>
+        );
+      })}
+    </motion.ul>
   );
 }
 
@@ -69,9 +119,6 @@ export default function HeroWithSkills() {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <Card className="px-8 py-13 flex flex-col items-center gap-6">
-            {/* <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
-              ABOUT ME
-            </p> */}
             <div className="flex items-center justify-center gap-6 flex-wrap text-center">
               <motion.div
                 className="relative w-35 h-35 md:w-30 md:h-30 rounded-full overflow-hidden shadow-[0_0_15px_5px_#6D65FF]/30"
@@ -82,7 +129,6 @@ export default function HeroWithSkills() {
                   ease: "easeInOut",
                 }}
               >
-                {/* <div className="relative w-35 h-35 md:w-30 md:h-30 rounded-full overflow-hidden shadow-sm"> */}
                 <Image
                   src="/images/sooah.png"
                   fill
@@ -111,8 +157,8 @@ export default function HeroWithSkills() {
             </CardContent>
           </Card>
         </motion.div>
-        {/* RIGHT CARD - Tech Stack */}
 
+        {/* RIGHT CARD - Tech Stack */}
         <Card className="p-5 flex flex-col gap-4">
           {/* 헤더 */}
           <div className="flex items-center justify-between gap-3">
@@ -131,7 +177,7 @@ export default function HeroWithSkills() {
               Learning
             </span>
             <span className="inline-flex items-center gap-1">
-              <span className="inline-block h-4 w-4  rounded-full bg-[#C6C4FF]" />{" "}
+              <span className="inline-block h-4 w-4 rounded-full bg-[#C6C4FF]" />{" "}
               Comfortable
             </span>
             <span className="inline-flex items-center gap-1">
@@ -163,13 +209,9 @@ export default function HeroWithSkills() {
             <h3 className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
               {active}
             </h3>
-            <ul className="flex flex-wrap gap-2">
-              {list.map((s) => (
-                <li key={s.name}>
-                  <SkillBadge name={s.name} level={s.level} />
-                </li>
-              ))}
-            </ul>
+            <div className="flex-grow flex items-center justify-center">
+              <SkillList key={active} list={list} />
+            </div>
           </div>
         </Card>
       </div>
