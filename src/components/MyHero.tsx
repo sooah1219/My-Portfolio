@@ -1,10 +1,10 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { skills } from "@/data/skill";
 import { motion, type Variants } from "framer-motion";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Level = "learning" | "comfortable" | "confident";
 
@@ -100,14 +100,52 @@ function SkillList({ list }: { list: Skill[] }) {
   );
 }
 
+const HERO_LINES = [
+  "<Hello, I'm Sooah! ✋ >",
+  "<full-stack developer>",
+  "<turning concepts into real products.>",
+];
+
 export default function HeroWithSkills() {
   const categories = useMemo(() => Object.keys(skillsTyped) as Category[], []);
-
   const [active, setActive] = useState<Category>(
     categories[0] ?? ("" as Category)
   );
-
   const list: Skill[] = skillsTyped[active] ?? [];
+
+  const [displayedLines, setDisplayedLines] = useState<string[]>(() =>
+    HERO_LINES.map(() => "")
+  );
+  const [currentLine, setCurrentLine] = useState(0);
+  const [currentChar, setCurrentChar] = useState(0);
+
+  useEffect(() => {
+    if (currentLine >= HERO_LINES.length) return;
+
+    const fullLine = HERO_LINES[currentLine];
+
+    const interval = setInterval(() => {
+      setDisplayedLines((prev) => {
+        const copy = [...prev];
+        copy[currentLine] = fullLine.slice(0, currentChar + 1);
+        return copy;
+      });
+
+      if (currentChar < fullLine.length - 1) {
+        setCurrentChar((c) => c + 1);
+      } else {
+        clearInterval(interval);
+        setTimeout(() => {
+          setCurrentLine((l) => l + 1);
+          setCurrentChar(0);
+        }, 400);
+      }
+    }, 40);
+
+    return () => clearInterval(interval);
+  }, [currentLine, currentChar]);
+
+  const typingFinished = currentLine >= HERO_LINES.length;
 
   return (
     <section className="w-full flex justify-center mt-10 px-4">
@@ -118,49 +156,71 @@ export default function HeroWithSkills() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <Card className="px-8 py-13 flex flex-col items-center gap-6">
-            <div className="flex items-center justify-center gap-6 flex-wrap text-center">
-              <motion.div
-                className="relative w-35 h-35 md:w-30 md:h-30 rounded-full overflow-hidden shadow-[0_0_15px_5px_#6D65FF]/30"
-                animate={{ y: [0, -9, 0] }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <Image
-                  src="/images/sooah.png"
-                  fill
-                  alt="Profile"
-                  className="object-cover"
-                />
-              </motion.div>
+          <Card className="px-4 py-10 flex flex-col items-center gap-6 sm:min-h-[400px]">
+            <motion.div
+              className="relative w-32 h-32 md:w-36 md:h-36 rounded-full mb-5 overflow-hidden shadow-[0_0_15px_5px_#6D65FF]/30"
+              animate={{ y: [0, -6, 0] }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Image
+                src="/images/sooah.png"
+                fill
+                alt="Profile"
+                className="object-cover"
+              />
+            </motion.div>
 
-              <div className="flex flex-col items-center">
-                <h1 className="text-4xl md:text-4xl font-bold">Sooah Cho</h1>
-                <h3 className="text-xl md:text-xl mt-1 font-semibold text-[#6D65FF]">
-                  Full Stack Developer
-                </h3>
-              </div>
+            <div className="flex flex-col gap-1 text-left w-full max-w-lg">
+              {HERO_LINES.map((_, idx) => {
+                const isActive = idx === currentLine;
+                const hasStarted = displayedLines[idx].length > 0;
+
+                return (
+                  <div
+                    key={idx}
+                    className="flex items-baseline gap-3 whitespace-pre-wrap"
+                  >
+                    {hasStarted ? (
+                      <span className="text-[11px] text-muted-foreground">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                    ) : (
+                      <span className="text-[11px] w-6" />
+                    )}
+
+                    <p className="text-lg md:text-2xl leading-tight">
+                      {(() => {
+                        const lineText = displayedLines[idx];
+                        const name = "Sooah";
+                        const i = lineText.indexOf(name);
+                        if (i === -1) return lineText;
+                        return (
+                          <>
+                            {lineText.slice(0, i)}
+                            <span className="text-[#6D65FF] ">{name}</span>
+                            {lineText.slice(i + name.length)}
+                          </>
+                        );
+                      })()}
+                      {idx === currentLine && !typingFinished && (
+                        <span className="inline-block w-[1ch] animate-pulse">
+                          |
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
-
-            <CardContent className="max-w-3xl text-center space-y-2 mt-2">
-              <p className="text-base md:text-md text-gray-600">
-                Experienced in shipping full-stack applications from development
-                to production. Comfortable contributing across frontend,
-                backend, and cloud deployment with awareness of UI/UX, API
-                design, data modeling, and operational reliability. Familiar
-                with the full development lifecycle, including planning,
-                implementation, deployment, and ongoing improvement.
-              </p>
-            </CardContent>
           </Card>
         </motion.div>
 
         {/* RIGHT CARD - Tech Stack */}
         <Card className="p-5 flex flex-col gap-4">
-          {/* 헤더 */}
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
@@ -170,7 +230,6 @@ export default function HeroWithSkills() {
             </div>
           </div>
 
-          {/* Legend */}
           <div className="flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
             <span className="inline-flex items-center gap-1">
               <span className="inline-block h-4 w-4 rounded-full bg-[#E7E6FF]" />{" "}
