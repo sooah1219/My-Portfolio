@@ -192,7 +192,7 @@ export default function HeroWithSkills() {
                       <span className="text-[11px] w-6" />
                     )}
 
-                    <p className="text-lg md:text-2xl leading-tight">
+                    <p className="text-base md:text-lg lg:text-2xl leading-tight">
                       {(() => {
                         const lineText = displayedLines[idx];
                         const name = "Sooah";

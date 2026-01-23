@@ -43,50 +43,62 @@ export default function ContactForm() {
   });
 
   const onSubmit = async (values: ContactFormValues) => {
+    const promise = fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    }).then(async (res) => {
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        throw new Error(data.message || "Failed to send message.");
+      }
+      return data;
+    });
+
+    toast.promise(promise, {
+      loading: "Sending your message...",
+      success: "Message sent! I'll get back to you soon 🚀",
+      style: {
+        background: "#E7E6FF",
+        color: "#4E47CE",
+        fontFamily: "DM Sans, sans-serif",
+        borderRadius: "10px",
+        boxShadow: "0 4px 18px rgba(109, 101, 255, 0.35)",
+        border: "#6D65FF",
+      },
+      error: (err) =>
+        err instanceof Error ? err.message : "Something went wrong.",
+    });
+
     try {
-      const promise = fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      }).then(async (res) => {
-        const data: { ok?: boolean; message?: string } = await res.json();
-        if (!res.ok || !data.ok) {
-          throw new Error(data.message || "Failed to send message.");
-        }
-        return data;
-      });
-
-      toast.promise(promise, {
-        loading: "Sending your message...",
-        success: "Message sent! I’ll get back to you soon.",
-        error: (err: unknown) =>
-          err instanceof Error
-            ? err.message
-            : "Something went wrong while sending your message.",
-      });
-
       await promise;
       form.reset();
-    } catch (error) {
-      console.error("Contact form error:", error);
-    }
+    } catch (_) {}
   };
 
   const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 w-full max-w-xl mx-auto"
+      >
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel className="text-sm">Name</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" autoComplete="name" {...field} />
+                <Input
+                  placeholder="Your name"
+                  autoComplete="name"
+                  className="text-sm"
+                  {...field}
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
@@ -96,16 +108,17 @@ export default function ContactForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-sm">Email</FormLabel>
               <FormControl>
                 <Input
                   type="email"
                   placeholder="you@example.com"
                   autoComplete="email"
+                  className="text-sm"
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
@@ -115,25 +128,26 @@ export default function ContactForm() {
           name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Message</FormLabel>
+              <FormLabel className="text-sm">Message</FormLabel>
               <FormControl>
                 <Textarea
                   rows={5}
                   placeholder="Tell me a bit about your project or question..."
+                  className="text-sm"
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
 
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <Button
             asChild
             variant="outline"
             aria-label="Book an interview"
-            className="border-[#6D65FF] text-[#6D65FF] hover:bg-[#6D65FF]/10 hover:text-[#594FEE]"
+            className="w-full sm:w-auto border-[#6D65FF] text-[#6D65FF] hover:bg-[#6D65FF]/10 hover:text-[#594FEE]"
           >
             <Link href="/calendar">Book an interview</Link>
           </Button>
@@ -141,7 +155,7 @@ export default function ContactForm() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="bg-[#6D65FF] text-white transition-colors hover:bg-[#5951E6]"
+            className="w-full sm:w-auto bg-[#6D65FF] text-white transition-colors hover:bg-[#5951E6]"
           >
             {isSubmitting ? "Sending..." : "Send message"}
           </Button>

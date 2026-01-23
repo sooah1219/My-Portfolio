@@ -1,15 +1,11 @@
-import ContactForm from "@/components/contact-form";
-
+"use client";
+import ContactSection from "@/components/ContactSection";
 export default function ContactPage() {
   return (
-    <div className="flex justify-center items-start mt-16 px-4">
-      <div className="w-full max-w-xl">
-        <h1 className="text-3xl font-bold mb-4">Contact Me</h1>
-        <p className="text-muted-foreground mb-8">
-          Feel free to reach out about projects, collaboration, or questions.
-        </p>
-        <ContactForm />
+    <section className="w-full flex justify-center mt-10 px-4">
+      <div className="max-w-6xl w-full">
+        <ContactSection />
       </div>
-    </div>
+    </section>
   );
 }

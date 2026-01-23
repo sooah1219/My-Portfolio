@@ -124,8 +124,12 @@ body {
     @apply border-border outline-ring/50;
   }
 
+  html {
+    @apply max-w-full overflow-x-hidden;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground max-w-full overflow-x-hidden;
   }
 }
 
@@ -144,4 +148,31 @@ body {
   --color-calendar-graph-day-L2-bg: #a49dff;
   --color-calendar-graph-day-L3-bg: #6d65ff;
   --color-calendar-graph-day-L4-bg: #4b45d4;
+}
+
+/* GitHub Calendar 강제 리사이즈 & 오버플로 숨기기 */
+.calendar-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.calendar.github-calendar {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden;
+}
+
+/* 라이브러리가 만들어주는 table / grid / svg 전부 100% 안으로 */
+.calendar table,
+.calendar .ContributionCalendar,
+.calendar .ContributionCalendar-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: fixed;
+}
+
+.calendar svg {
+  width: 100% !important;
+  max-width: 100% !important;
 }
