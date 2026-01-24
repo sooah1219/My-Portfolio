@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+    domains: ["img.clerk.com"],
   },
 };
 

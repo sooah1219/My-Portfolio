@@ -21,21 +21,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useClerk, useUser } from "@clerk/nextjs";
 import { ChevronDown, Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-
-type AppUser = {
-  name?: string | null;
-  picture?: string | null;
-};
-
-type MyNavBarProps = {
-  isLoggedIn?: boolean;
-  user?: AppUser | null;
-};
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -44,18 +35,32 @@ const navItems = [
   { href: "/contact", label: "Contact" },
 ];
 
-export default function MyNavBar({
-  isLoggedIn = false,
-  user = null,
-}: MyNavBarProps) {
+export default function MyNavBar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
 
+  const { isSignedIn, user, isLoaded } = useUser();
+  const { signOut } = useClerk();
+
   const isActive = (href: string) => pathname === href;
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.push("/");
+    } catch (e) {
+      console.error("Failed to sign out", e);
+    }
+  };
+
+  const displayName =
+    user?.firstName || user?.fullName || user?.username || "Account";
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b">
       <nav className="max-w-5xl mx-auto flex items-center justify-between py-4 px-4">
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold">
           <Image
             src="/images/logo.png"
@@ -67,6 +72,7 @@ export default function MyNavBar({
           <span className="text-base sm:text-xl">My Portfolio</span>
         </Link>
 
+        {/* Desktop nav */}
         <div className="hidden min-[700px]:flex items-center gap-4">
           <NavigationMenu>
             <NavigationMenuList>
@@ -132,6 +138,7 @@ export default function MyNavBar({
             </NavigationMenuList>
           </NavigationMenu>
 
+          {/* Auth dropdown (Clerk) */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
@@ -142,10 +149,10 @@ export default function MyNavBar({
                   transition-colors
                 "
               >
-                {isLoggedIn && user?.picture && (
+                {isSignedIn && user?.imageUrl && (
                   <Image
-                    src={user.picture}
-                    alt={user.name || "User"}
+                    src={user.imageUrl}
+                    alt={displayName}
                     width={24}
                     height={24}
                     className="rounded-full"
@@ -153,7 +160,11 @@ export default function MyNavBar({
                 )}
 
                 <span className="max-w-[9rem] truncate">
-                  {isLoggedIn && user?.name ? user.name : "Login"}
+                  {isLoaded
+                    ? isSignedIn
+                      ? displayName
+                      : "Login"
+                    : "Loading..."}
                 </span>
 
                 <ChevronDown className="w-4 h-4" />
@@ -164,32 +175,33 @@ export default function MyNavBar({
               align="end"
               className="min-w-[190px] rounded-xl border bg-white p-2 shadow-lg"
             >
-              {isLoggedIn && user?.name && (
+              {isSignedIn && (
                 <>
                   <DropdownMenuLabel className="text-xs text-gray-500">
                     Signed in as
                     <br />
                     <span className="font-medium text-gray-800">
-                      {user.name}
+                      {displayName}
                     </span>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                 </>
               )}
 
-              {isLoggedIn ? (
+              {isSignedIn ? (
                 <DropdownMenuItem asChild>
-                  <Link
-                    href="/auth/logout"
-                    className="w-full rounded-md px-2 py-1.5 text-sm text-gray-800 hover:bg-[#6D65FF]/5 hover:text-[#6D65FF] transition-colors"
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="w-full rounded-md px-2 py-1.5 text-left text-sm text-gray-800 hover:bg-[#6D65FF]/5 hover:text-[#6D65FF] transition-colors"
                   >
                     Logout
-                  </Link>
+                  </button>
                 </DropdownMenuItem>
               ) : (
                 <DropdownMenuItem asChild>
                   <Link
-                    href="/auth/login"
+                    href="/sign-in"
                     className="w-full rounded-md px-2 py-1.5 text-sm text-gray-800 hover:bg-[#6D65FF]/5 hover:text-[#6D65FF] transition-colors"
                   >
                     Login
@@ -199,7 +211,8 @@ export default function MyNavBar({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        {/* hamburger */}
+
+        {/* Mobile hamburger */}
         <div className="min-[700px]:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -240,40 +253,41 @@ export default function MyNavBar({
 
                 <div className="h-px bg-gray-200 my-2" />
 
-                {isLoggedIn ? (
+                {isSignedIn ? (
                   <>
-                    <Link
-                      href="/auth/logout"
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpen(false);
+                        handleLogout();
+                      }}
                       className="
-                        text-sm font-medium text-gray-800 px-4
+                        text-sm font-medium text-gray-800 px-4 text-left
                         hover:text-[#6D65FF] hover:bg-[#6D65FF]/5 hover:translate-x-1
                         transition-all
                       "
-                      onClick={() => setOpen(false)}
                     >
                       Logout
-                    </Link>
+                    </button>
 
-                    {user?.picture && (
+                    {user?.imageUrl && (
                       <div className="mt-4 flex items-center gap-2 px-4">
                         <Image
-                          src={user.picture}
-                          alt={user.name || "User"}
+                          src={user.imageUrl}
+                          alt={displayName}
                           width={32}
                           height={32}
                           className="rounded-full"
                         />
-                        {user?.name && (
-                          <span className="text-sm text-gray-700 max-w-[9rem] truncate">
-                            {user.name}
-                          </span>
-                        )}
+                        <span className="text-sm text-gray-700 max-w-[9rem] truncate">
+                          {displayName}
+                        </span>
                       </div>
                     )}
                   </>
                 ) : (
                   <Link
-                    href="/auth/login"
+                    href="/sign-in"
                     className="
                       text-sm font-medium text-gray-800 px-4
                       hover:text-[#6D65FF] hover:bg-[#6D65FF]/5 hover:translate-x-1

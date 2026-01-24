@@ -14,12 +14,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { projects } from "@/data/projects";
+// import { projects } from "@/data/projects";
+import type { Project } from "@/data/projects";
 
 type PlatformFilter = "all" | "Web" | "Mobile";
 type SortOption = "newest" | "oldest" | "title";
+type ProjectsListProps = {
+  projects: Project[];
+};
 
-export default function ProjectsList() {
+export default function ProjectsList({ projects }: ProjectsListProps) {
   const [search, setSearch] = useState("");
   const [platformFilter, setPlatformFilter] = useState<PlatformFilter>("all");
   const [sortOption, setSortOption] = useState<SortOption>("newest");
@@ -65,7 +69,7 @@ export default function ProjectsList() {
     });
 
     return list;
-  }, [search, platformFilter, sortOption]);
+  }, [search, platformFilter, sortOption, projects]);
 
   return (
     <section className="w-full flex justify-center px-4">

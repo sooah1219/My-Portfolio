@@ -10,7 +10,6 @@ const ResumeSection: FC = () => {
   return (
     <section className="w-full flex justify-center px-4">
       <div className="max-w-6xl w-full space-y-6">
-        {/* Top header – same layout as Projects */}
         <div className="flex items-center justify-between">
           <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
             Resume
@@ -28,12 +27,9 @@ const ResumeSection: FC = () => {
           </a>
         </div>
 
-        {/* One big card containing the entire resume */}
         <Card className="border border-border/70 bg-card/80 shadow-sm">
           <div className="p-4 sm:p-8 md:p-10 max-w-2xl mx-auto space-y-8 text-neutral-900 leading-relaxed">
-            {/* Header */}
             <div className="flex justify-between items-start">
-              {/* Name + Title */}
               <div className="space-y-2">
                 <div className="flex items-start gap-2 text-[#6D65FF]">
                   <Image
@@ -56,7 +52,6 @@ const ResumeSection: FC = () => {
                 </h2>
               </div>
 
-              {/* Contact Info */}
               <div className="flex flex-col text-right space-y-0.5 text-[11px] sm:text-[13px] md:text-[15px]">
                 <div className="uppercase font-semibold text-[#6D65FF] tracking-wide text-xs sm:text-sm md:text-[15px] leading-tight">
                   Contact
@@ -72,7 +67,6 @@ const ResumeSection: FC = () => {
               </div>
             </div>
 
-            {/* Education */}
             <Section title="Education">
               <Row
                 left={
@@ -101,7 +95,6 @@ const ResumeSection: FC = () => {
               <SkillLine skills="Github | Figma | Jira | Agile | AWS Basics | Vercel | CI/CD | SEO" />
             </Section>
 
-            {/* Projects */}
             <Section title="Projects">
               <Project
                 title="Community of Guardians — Social Platform Web"
@@ -140,7 +133,6 @@ const ResumeSection: FC = () => {
               />
             </Section>
 
-            {/* Experience */}
             <Section title="Experience">
               <Row
                 left="Manager / Tenton Restaurant"
@@ -161,7 +153,6 @@ const ResumeSection: FC = () => {
               </ul>
             </Section>
 
-            {/* Certification */}
             <Section title="Certification">
               <Row left="AWS Certified Developer – Associate" right="2025" />
             </Section>
@@ -171,8 +162,6 @@ const ResumeSection: FC = () => {
     </section>
   );
 };
-
-/* ---------- Reusable sub components ---------- */
 
 interface SectionProps {
   title: string;

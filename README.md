@@ -1,8 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sooah Portfolio — Developer Showcase
 
-## Getting Started
+A production-quality developer portfolio built with **Next.js**, **TypeScript**, and **Tailwind**, featuring Clerk authentication, project case studies, and a contact/booking workflow optimized for hiring and collaboration.
 
-First, run the development server:
+---
+
+## 🎯 Purpose
+
+This project is built to present my engineering work professionally for **recruiters, hiring managers, and technical interviewers**, demonstrating a mix of UI/UX polish, real-world authentication patterns, and deployable application logic.
+
+---
+
+## 🛠 Tech Stack
+
+- **Next.js 14 (App Router)**
+- **TypeScript**
+- **Tailwind CSS**
+- **Shadcn UI**
+- **Clerk (Auth + User)**
+- **React Hook Form + Zod**
+- **Sonner (Toast)**
+- **Neon — PostgreSQL + Drizzle Orm**
+- **Vercel (Deployment)**
+
+---
+
+## ✨ Getting Started
+
+- First, run the development server:
 
 ```bash
 npm run dev
@@ -12,25 +36,30 @@ yarn dev
 pnpm dev
 # or
 bun dev
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧭 Technical Decisions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js App Router** for hybrid rendering and improved routing ergonomics
+- **Clerk** for production-ready auth without maintaining OAuth boilerplate
+- **React Hook Form + Zod** for type-safe validation that improves UX + DX
+- **Tailwind + shadcn/ui** for fast design iteration with consistent styling
+- **Neon** for serverless-friendly PostgreSQL deployments
+- **Vercel** for seamless CI/CD deployment and preview environments
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🧱 Architecture Overview
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```mermaid
+flowchart TD
+User --> UI[Next.js UI]
+UI --> Auth[Clerk Auth]
+UI --> API[Contact API Route]
+API --> Email[Email Service]
+UI --> Calendar[Interview Booking]
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```

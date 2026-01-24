@@ -1,5 +1,3 @@
-"use client";
-
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -8,11 +6,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { projects } from "@/data/projects";
+// import { projects } from "@/data/projects";
+import { db } from "@/db/client";
+import { projects } from "@/db/schema";
+import { type InferSelectModel } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
 
-export function ProjectsSection() {
+type Project = InferSelectModel<typeof projects>;
+
+export async function ProjectsSection() {
+  const featuredProjects: Project[] = await db.select().from(projects).limit(3);
   return (
     <section className="w-full flex justify-center mt-10 px-4">
       <div className="max-w-6xl w-full">
@@ -37,7 +41,7 @@ export function ProjectsSection() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {projects.map((project) => (
+          {featuredProjects.map((project) => (
             <Link
               key={project.id}
               href={`/projects/${project.slug}`}

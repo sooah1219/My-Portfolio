@@ -94,7 +94,7 @@ export default function ContactForm() {
                 <Input
                   placeholder="Your name"
                   autoComplete="name"
-                  className="text-sm"
+                  className="text-sm focus-visible:ring-1 focus-visible:ring-[#6D65FF] focus-visible:border-[#C6C4FF]"
                   {...field}
                 />
               </FormControl>
@@ -114,7 +114,7 @@ export default function ContactForm() {
                   type="email"
                   placeholder="you@example.com"
                   autoComplete="email"
-                  className="text-sm"
+                  className="text-sm focus-visible:ring-1 focus-visible:ring-[#6D65FF] focus-visible:border-[#C6C4FF]"
                   {...field}
                 />
               </FormControl>
@@ -132,8 +132,8 @@ export default function ContactForm() {
               <FormControl>
                 <Textarea
                   rows={5}
-                  placeholder="Tell me a bit about your project or question..."
-                  className="text-sm"
+                  placeholder="Tell me about your idea, project, or opportunity."
+                  className="text-sm focus-visible:ring-1 focus-visible:ring-[#6D65FF] focus-visible:border-[#C6C4FF]"
                   {...field}
                 />
               </FormControl>

@@ -16,7 +16,7 @@ export default function ContactSection() {
         </div>
 
         <Card className="border border-border/70 bg-card/80 shadow-sm">
-          <div className="p-4 sm:p-8 md:p-10 max-w-2xl mx-auto space-y-8 text-neutral-900 leading-relaxed">
+          <div className="p-4 sm:p-8 md:p-10 space-y-8 text-neutral-900 leading-relaxed">
             <ContactForm />
           </div>
         </Card>
