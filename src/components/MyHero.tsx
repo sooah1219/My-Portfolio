@@ -64,9 +64,9 @@ function SkillBadge({ name, level }: SkillBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs md:text-[11px] font-medium ${cfg.wrapper} hover:shadow-sm hover:-translate-y-[3px]`}
+      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[12px] md:text-[11px] font-medium ${cfg.wrapper} hover:shadow-sm hover:-translate-y-[3px]`}
     >
-      <span className="text-[11px] md:text-[11px]">{name}</span>
+      <span className="text-[11px] md:text-[11px] lg:text-[13px]">{name}</span>
     </span>
   );
 }
@@ -81,7 +81,7 @@ function SkillList({ list }: { list: Skill[] }) {
       variants={listVariants}
       initial="hidden"
       animate="visible"
-      className="flex flex-wrap gap-2 justify-center mt-0 md:mt-3"
+      className="flex flex-wrap gap-3 justify-center mt-0 md:mt-3"
     >
       {list.map((s, idx) => {
         const order = randomOrder[idx] ?? idx;
@@ -230,7 +230,7 @@ export default function HeroWithSkills() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
+          {/* <div className="flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
             <span className="inline-flex items-center gap-1">
               <span className="inline-block h-4 w-4 rounded-full bg-[#E7E6FF]" />{" "}
               Learning
@@ -243,7 +243,7 @@ export default function HeroWithSkills() {
               <span className="inline-block h-4 w-4 rounded-full bg-[#6D65FF]" />{" "}
               Confident
             </span>
-          </div>
+          </div> */}
 
           {/* Category Tabs */}
           <div className="flex flex-wrap gap-1">
@@ -264,11 +264,11 @@ export default function HeroWithSkills() {
           </div>
 
           {/* Skills */}
-          <div className="rounded-2xl border border-border/70 bg-card/80 p-3 shadow-sm h-full">
-            <h3 className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="rounded-2xl border border-border/70 bg-card/80 p-3 mt-3 shadow-sm h-full">
+            <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
               {active}
             </h3>
-            <div className="flex-grow flex items-center justify-center">
+            <div className="flex-grow flex items-center justify-center ">
               <SkillList key={active} list={list} />
             </div>
           </div>
