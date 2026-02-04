@@ -1,6 +1,6 @@
 # Sooah Portfolio — Developer Showcase
 
-A production-quality developer portfolio built with **Next.js**, **TypeScript**, and **Tailwind**, featuring Clerk authentication, project case studies, and a contact/booking workflow optimized for hiring and collaboration.
+A production-quality developer portfolio built with **Next.js**, **TypeScript**, and **Tailwind**, featuring project case studies, and a contact/booking workflow optimized for hiring and collaboration.
 
 ---
 
@@ -16,7 +16,6 @@ This project is built to present my engineering work professionally for **recrui
 - **TypeScript**
 - **Tailwind CSS**
 - **Shadcn UI**
-- **Clerk (Auth + User)**
 - **React Hook Form + Zod**
 - **Sonner (Toast)**
 - **Neon — PostgreSQL + Drizzle Orm**
@@ -51,15 +50,3 @@ bun dev
 - **Vercel** for seamless CI/CD deployment and preview environments
 
 ---
-
-## 🧱 Architecture Overview
-
-```mermaid
-flowchart TD
-User --> UI[Next.js UI]
-UI --> Auth[Clerk Auth]
-UI --> API[Contact API Route]
-API --> Email[Email Service]
-UI --> Calendar[Interview Booking]
-
-```

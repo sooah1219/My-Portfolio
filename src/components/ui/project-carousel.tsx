@@ -8,9 +8,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 type ProjectCarouselProps = {
   images: string[];
   title: string;
+  className?: string;
 };
 
-export function ProjectCarousel({ images, title }: ProjectCarouselProps) {
+export function ProjectCarousel({
+  images,
+  title,
+  className = "",
+}: ProjectCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -86,7 +91,7 @@ export function ProjectCarousel({ images, title }: ProjectCarouselProps) {
 
   return (
     <div
-      className="relative w-full group"
+      className={cn("relative w-full group", className)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
