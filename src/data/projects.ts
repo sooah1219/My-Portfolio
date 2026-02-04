@@ -1,8 +1,8 @@
-// data/projects.ts
 export type Project = {
   id: string;
   slug: string;
   title: string;
+  subtitle?: string | null;
   thumbnail: string;
   techStack: string[];
   summary: string;
@@ -14,6 +14,7 @@ export type Project = {
   liveUrl: string;
   githubUrl: string;
   images: string[];
+  rationale?: string | null;
 };
 
 // export const projects: Project[] = [

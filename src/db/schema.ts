@@ -7,6 +7,7 @@ export const projects = pgTable("projects", {
 
   slug: text("slug").notNull().unique(),
   title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
 
   thumbnail: text("thumbnail").notNull(),
 
@@ -24,6 +25,7 @@ export const projects = pgTable("projects", {
   githubUrl: text("github_url").notNull(),
 
   images: text("images").array().notNull(),
+  rationale: text("rationale"),
 });
 
 export type ProjectFromDB = typeof projects.$inferSelect;

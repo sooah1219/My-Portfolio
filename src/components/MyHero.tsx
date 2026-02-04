@@ -120,11 +120,24 @@ export default function HeroWithSkills() {
   const [currentChar, setCurrentChar] = useState(0);
 
   useEffect(() => {
-    if (currentLine >= HERO_LINES.length) return;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+    let nextLineTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    let restartTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+    if (currentLine >= HERO_LINES.length) {
+      restartTimeoutId = setTimeout(() => {
+        setDisplayedLines(HERO_LINES.map(() => ""));
+        setCurrentLine(0);
+        setCurrentChar(0);
+      }, 1200);
+      return () => {
+        if (restartTimeoutId) clearTimeout(restartTimeoutId);
+      };
+    }
 
     const fullLine = HERO_LINES[currentLine];
 
-    const interval = setInterval(() => {
+    intervalId = setInterval(() => {
       setDisplayedLines((prev) => {
         const copy = [...prev];
         copy[currentLine] = fullLine.slice(0, currentChar + 1);
@@ -134,15 +147,21 @@ export default function HeroWithSkills() {
       if (currentChar < fullLine.length - 1) {
         setCurrentChar((c) => c + 1);
       } else {
-        clearInterval(interval);
-        setTimeout(() => {
+        if (intervalId) clearInterval(intervalId);
+        intervalId = null;
+
+        nextLineTimeoutId = setTimeout(() => {
           setCurrentLine((l) => l + 1);
           setCurrentChar(0);
         }, 400);
       }
     }, 40);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      if (nextLineTimeoutId) clearTimeout(nextLineTimeoutId);
+      if (restartTimeoutId) clearTimeout(restartTimeoutId);
+    };
   }, [currentLine, currentChar]);
 
   const typingFinished = currentLine >= HERO_LINES.length;

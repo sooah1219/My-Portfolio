@@ -77,25 +77,25 @@ export async function ProjectsSection() {
                   )}
                 </div>
 
-                <CardHeader className="relative z-20">
-                  <div className="flex items-center justify-between gap-2">
-                    <CardTitle className="text-base font-semibold leading-tight">
+                <CardHeader className="relative z-20 pointer-events-none text-center">
+                  <div className="flex justify-center">
+                    <CardTitle className="pointer-events-auto font-semibold leading-tight text-base sm:text-lg md:text-xl transition-colors duration-200 group-hover:text-[#4E47CE]">
                       {project.title}
                     </CardTitle>
                   </div>
+                  <p className="pointer-events-auto text-sm md:text-[15px] leading-snug text-[#4E47CE] transition-colors duration-200 group-hover:text-muted-foreground line-clamp-3">
+                    {project.subtitle}
+                  </p>
                 </CardHeader>
 
-                <CardContent className="space-y-3 pb-3">
-                  <p className="text-sm text-muted-foreground line-clamp-3">
-                    {project.summary}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
+                <CardContent className="space-y-3 pb-3 ">
+                  <div className="flex flex-wrap gap-1.5 justify-center">
                     {project.techStack.map((tech) => (
                       <Badge
                         key={tech}
                         variant="secondary"
                         className="
-                          text-[10px] font-medium transition-colors duration-200
+                          text-[11px] font-medium transition-colors duration-200
                           group-hover:bg-[#E7E6FF] group-hover:text-[#4E47CE]
                         "
                       >

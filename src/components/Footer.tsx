@@ -2,7 +2,10 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export function Footer() {
   return (
-    <footer className="w-full flex flex-col items-center justify-center text-center text-sm text-muted-foreground mt-24 pb-8">
+    <footer
+      id="footer"
+      className="w-full flex flex-col items-center justify-center text-center text-sm text-muted-foreground mt-24 pb-8"
+    >
       <div className="flex items-center gap-4 mt-2">
         <a
           href="https://github.com/sooah1219"
