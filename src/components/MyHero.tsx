@@ -118,6 +118,16 @@ export default function HeroWithSkills() {
   );
   const [currentLine, setCurrentLine] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)"); // < sm
+    const onChange = () => setIsMobile(mq.matches);
+
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval> | null = null;
@@ -125,6 +135,8 @@ export default function HeroWithSkills() {
     let restartTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
     if (currentLine >= HERO_LINES.length) {
+      if (isMobile) return;
+
       restartTimeoutId = setTimeout(() => {
         setDisplayedLines(HERO_LINES.map(() => ""));
         setCurrentLine(0);
@@ -162,7 +174,7 @@ export default function HeroWithSkills() {
       if (nextLineTimeoutId) clearTimeout(nextLineTimeoutId);
       if (restartTimeoutId) clearTimeout(restartTimeoutId);
     };
-  }, [currentLine, currentChar]);
+  }, [currentLine, currentChar, isMobile]);
 
   const typingFinished = currentLine >= HERO_LINES.length;
 
@@ -211,7 +223,7 @@ export default function HeroWithSkills() {
                       <span className="text-[11px] w-6" />
                     )}
 
-                    <p className="text-base md:text-lg lg:text-2xl leading-tight">
+                    <p className="sm:text-[14px] md:text-xl lg:text-2xl leading-tight">
                       {(() => {
                         const lineText = displayedLines[idx];
                         const name = "Sooah";

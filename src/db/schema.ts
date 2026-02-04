@@ -1,6 +1,12 @@
-import { pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { jsonb, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 export const platformEnum = pgEnum("platform_enum", ["Web", "Mobile"]);
+
+export type ProjectDetail = {
+  title: string;
+  description: string[];
+  video?: string;
+};
 
 export const projects = pgTable("projects", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -26,6 +32,7 @@ export const projects = pgTable("projects", {
 
   images: text("images").array().notNull(),
   rationale: text("rationale"),
+  details: jsonb("details").$type<ProjectDetail[]>(),
 });
 
 export type ProjectFromDB = typeof projects.$inferSelect;

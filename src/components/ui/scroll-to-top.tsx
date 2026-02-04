@@ -26,7 +26,6 @@ export function ScrollToTopButton() {
     const updateLift = () => {
       const rect = footer.getBoundingClientRect();
       const viewportH = window.innerHeight;
-
       const overlap = Math.max(0, viewportH - rect.top);
 
       if (overlap > 0) {

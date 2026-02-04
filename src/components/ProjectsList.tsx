@@ -149,7 +149,7 @@ export default function ProjectsList({ projects }: ProjectsListProps) {
                     transition-all duration-300
                   "
                 >
-                  <div className="relative w-full aspect-[16/10]">
+                  <div className="relative w-full aspect-[5/4] sm:aspect-[4/3]">
                     <Image
                       src={project.thumbnail}
                       alt={project.title}
@@ -172,39 +172,43 @@ export default function ProjectsList({ projects }: ProjectsListProps) {
                     )}
                   </div>
 
-                  <CardHeader className="p-3 pb-1">
-                    <CardTitle className="text-sm font-semibold leading-tight">
+                  <CardHeader className="p-3 pb-1 space-y-1">
+                    {project.developedAt && (
+                      <p className="text-[11px] text-muted-foreground">
+                        {project.developedAt}
+                      </p>
+                    )}
+
+                    <CardTitle className="text-base sm:text-lg font-semibold leading-snug">
                       {project.title}
                     </CardTitle>
-                    {project.developedAt && (
-                      <p className="text-[11px] text-muted-foreground mt-1">
-                        {project.developedAt}
+
+                    {project.subtitle && (
+                      <p className="text-xs text-muted-foreground line-clamp-2">
+                        {project.subtitle}
                       </p>
                     )}
                   </CardHeader>
 
-                  <CardContent className="p-3 space-y-2">
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {project.summary}
-                    </p>
-
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.techStack.slice(0, 4).map((tech) => (
+                  <CardContent className="p-3 pt-2">
+                    <div className="flex flex-wrap gap-2">
+                      {project.techStack.slice(0, 6).map((tech) => (
                         <Badge
                           key={tech}
                           variant="secondary"
                           className="
-                            text-[9px] font-medium transition-colors duration-200
-                            group-hover:bg-[#E7E6FF] group-hover:text-[#4E47CE]
-                          "
+          text-[11px] sm:text-xs font-medium px-2 py-0.5
+          transition-colors duration-200
+          group-hover:bg-[#E7E6FF] group-hover:text-[#4E47CE]
+        "
                         >
                           {tech}
                         </Badge>
                       ))}
 
-                      {project.techStack.length > 4 && (
-                        <span className="text-[9px] text-muted-foreground">
-                          +{project.techStack.length - 4} more
+                      {project.techStack.length > 6 && (
+                        <span className="text-[11px] sm:text-xs text-muted-foreground">
+                          +{project.techStack.length - 6} more
                         </span>
                       )}
                     </div>

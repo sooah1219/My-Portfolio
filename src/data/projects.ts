@@ -1,3 +1,9 @@
+export type ProjectDetail = {
+  title: string;
+  description: string[];
+  video?: string;
+};
+
 export type Project = {
   id: string;
   slug: string;
@@ -15,6 +21,7 @@ export type Project = {
   githubUrl: string;
   images: string[];
   rationale?: string | null;
+  details?: ProjectDetail[] | null;
 };
 
 // export const projects: Project[] = [

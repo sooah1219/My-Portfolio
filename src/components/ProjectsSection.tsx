@@ -33,7 +33,7 @@ export async function ProjectsSection() {
           <Link
             href="/projects"
             className="text-sm text-primary  hover:font-semibold
-            hover:text-[#6D65FF] hover:underline m-[8px]"
+            hover:text-[#6D65FF] m-[8px]"
           >
             View all
             <span className="ml-1 text-xs">↗</span>
@@ -79,11 +79,11 @@ export async function ProjectsSection() {
 
                 <CardHeader className="relative z-20 pointer-events-none text-center">
                   <div className="flex justify-center">
-                    <CardTitle className="pointer-events-auto font-semibold leading-tight text-base sm:text-lg md:text-xl transition-colors duration-200 group-hover:text-[#4E47CE]">
+                    <CardTitle className="pointer-events-auto font-semibold leading-tight text-xl transition-colors duration-200 group-hover:text-[#6D65FF]">
                       {project.title}
                     </CardTitle>
                   </div>
-                  <p className="pointer-events-auto text-sm md:text-[15px] leading-snug text-[#4E47CE] transition-colors duration-200 group-hover:text-muted-foreground line-clamp-3">
+                  <p className="pointer-events-auto text-md leading-snug text-[#6D65FF] transition-colors duration-200 group-hover:text-muted-foreground line-clamp-3">
                     {project.subtitle}
                   </p>
                 </CardHeader>
@@ -96,7 +96,7 @@ export async function ProjectsSection() {
                         variant="secondary"
                         className="
                           text-[11px] font-medium transition-colors duration-200
-                          group-hover:bg-[#E7E6FF] group-hover:text-[#4E47CE]
+                          group-hover:bg-[#E7E6FF] group-hover:text-[#6D65FF]
                         "
                       >
                         {tech}

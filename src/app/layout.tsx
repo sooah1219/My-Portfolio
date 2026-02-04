@@ -1,7 +1,8 @@
 import { Footer } from "@/components/Footer";
 import NavBarServer from "@/components/NavBarServer";
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Patrick_Hand } from "next/font/google";
+
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -9,6 +10,12 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
   variable: "--font-dm-sans",
+});
+
+const patrickHand = Patrick_Hand({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-handwriting",
 });
 
 export const metadata: Metadata = {
@@ -22,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={dmSans.variable}>
+    <html lang="en" className={`${dmSans.variable} ${patrickHand.variable}`}>
       <body className="overflow-x-hidden">
         <NavBarServer />
         {children}
