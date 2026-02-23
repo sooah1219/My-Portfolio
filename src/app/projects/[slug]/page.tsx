@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import BouncyIcon from "@/components/ui/BouncyIcon";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ProjectDetails from "@/components/ui/project-details";
+import ProjectDetailsAuto from "@/components/ui/project-details";
 import { ScrollToTopButton } from "@/components/ui/scroll-to-top";
 import { db } from "@/db/client";
 import { projects } from "@/db/schema";
@@ -51,14 +51,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 style={{ viewTransitionName: `project-image-${slug}` }}
               >
                 {project.images?.[0] && (
-                  <Image
-                    src={project.images[0]}
-                    alt={project.title}
-                    width={1200}
-                    height={800}
-                    priority
-                    className="w-full h-auto object-cover"
-                  />
+                  <div
+                    className={`
+        relative w-full
+        ${
+          project.platform === "Web"
+            ? "h-[300px] sm:h-[400px] md:h-[480px] lg:my-8 lg:h-[500px]"
+            : "h-[280px] sm:h-[300px] md:h-[380px] lg:h-[380px]"
+        }
+      `}
+                  >
+                    <Image
+                      src={project.images[0]}
+                      alt={project.title}
+                      fill
+                      priority
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 768px, 896px"
+                    />
+                  </div>
                 )}
               </div>
 
@@ -231,11 +242,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
           </Card>
 
-          <ProjectDetails
+          <ProjectDetailsAuto
             items={(project.details ?? []).map((d) => ({
               ...d,
               video: d.video ? cldVideo(d.video) : undefined,
             }))}
+            platform={project.platform}
           />
         </div>
       </section>

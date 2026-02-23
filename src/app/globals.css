@@ -163,7 +163,6 @@ body {
   overflow-x: hidden;
 }
 
-/* 라이브러리가 만들어주는 table / grid / svg 전부 100% 안으로 */
 .calendar table,
 .calendar .ContributionCalendar,
 .calendar .ContributionCalendar-grid {
