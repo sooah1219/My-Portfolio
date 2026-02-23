@@ -58,57 +58,43 @@ export default function MyNavBar() {
 
                 return (
                   <NavigationMenuItem key={item.href}>
-                    {active ? (
-                      <NavigationMenuLink
-                        asChild
-                        aria-disabled="true"
-                        className="
-                          group/navitem relative px-3 py-1.5 text-sm font-medium
-                          text-[#6D65FF] cursor-default
-                          !bg-transparent !hover:bg-transparent
-                          data-[state=open]:!bg-transparent data-[active]:!bg-transparent
-                          focus:!bg-transparent focus-visible:!bg-transparent
-                        "
+                    <NavigationMenuLink
+                      asChild
+                      className={`
+                group/navitem relative px-3 py-1.5 text-sm font-medium
+                !bg-transparent !hover:bg-transparent
+                data-[state=open]:!bg-transparent data-[active]:!bg-transparent
+                focus:!bg-transparent focus-visible:!bg-transparent
+                transition-colors
+                ${
+                  active
+                    ? "text-[#6D65FF] cursor-default"
+                    : "text-gray-700 hover:text-[#6D65FF]"
+                }
+              `}
+                    >
+                      <Link
+                        href={item.href}
+                        aria-current={active ? "page" : undefined}
+                        tabIndex={active ? -1 : 0}
+                        className={active ? "pointer-events-none" : ""}
                       >
-                        <span>
-                          {item.label}
-                          <span
-                            className="
-                              pointer-events-none absolute -bottom-0.5 left-1/2
-                              h-[2px] w-6 -translate-x-1/2 rounded-full
-                              bg-gradient-to-r from-transparent via-[#6D65FF] to-transparent
-                              opacity-100
-                            "
-                          />
-                        </span>
-                      </NavigationMenuLink>
-                    ) : (
-                      <NavigationMenuLink
-                        asChild
-                        className="
-                          group/navitem relative px-3 py-1.5 text-sm font-medium
-                          text-gray-700
-                          !bg-transparent !hover:bg-transparent
-                          hover:text-[#6D65FF]
-                          data-[state=open]:!bg-transparent data-[active]:!bg-transparent
-                          focus:!bg-transparent focus-visible:!bg-transparent
-                          transition-colors
-                        "
-                      >
-                        <Link href={item.href}>
-                          {item.label}
-                          <span
-                            className="
-                              pointer-events-none absolute -bottom-0.5 left-1/2
-                              h-[2px] w-0 -translate-x-1/2 rounded-full
-                              bg-gradient-to-r from-transparent via-[#6D65FF] to-transparent
-                              opacity-0 transition-all duration-150
-                              group-hover/navitem:w-6 group-hover/navitem:opacity-100
-                            "
-                          />
-                        </Link>
-                      </NavigationMenuLink>
-                    )}
+                        {item.label}
+                        <span
+                          className={`
+                    pointer-events-none absolute -bottom-0.5 left-1/2
+                    h-[2px] -translate-x-1/2 rounded-full
+                    bg-gradient-to-r from-transparent via-[#6D65FF] to-transparent
+                    transition-all duration-150
+                    ${
+                      active
+                        ? "w-6 opacity-100"
+                        : "w-0 opacity-0 group-hover/navitem:w-6 group-hover/navitem:opacity-100"
+                    }
+                  `}
+                        />
+                      </Link>
+                    </NavigationMenuLink>
                   </NavigationMenuItem>
                 );
               })}

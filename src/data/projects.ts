@@ -20,7 +20,7 @@ export type Project = {
   liveUrl: string;
   githubUrl: string;
   images: string[];
-  rationale?: string | null;
+  rationale?: string[] | null;
   details?: ProjectDetail[] | null;
 };
 

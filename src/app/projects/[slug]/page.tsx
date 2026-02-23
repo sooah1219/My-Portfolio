@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import BlurHighlight from "@/components/ui/blurHighlight";
 import BouncyIcon from "@/components/ui/BouncyIcon";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ProjectDetailsAuto from "@/components/ui/project-details";
@@ -186,9 +187,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     <span className="font-semibold text-[#6D65FF]">
                       Contributions
                     </span>
-                    <p className="text-muted-foreground leading-relaxed mt-1 text-sm sm:text-base md:text-lg">
+                    {/* <p className="text-muted-foreground leading-relaxed mt-1 text-sm sm:text-base md:text-lg">
                       {project.contributions}
-                    </p>
+                    </p> */}
+                    <BlurHighlight
+                      text={project.contributions}
+                      highlights={project.rationale ?? []}
+                      className="text-muted-foreground leading-relaxed mt-1 text-sm sm:text-base md:text-lg"
+                    />
                   </div>
                 )}
               </div>

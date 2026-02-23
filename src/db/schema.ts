@@ -31,7 +31,7 @@ export const projects = pgTable("projects", {
   githubUrl: text("github_url").notNull(),
 
   images: text("images").array().notNull(),
-  rationale: text("rationale"),
+  rationale: text("rationale").array(),
   details: jsonb("details").$type<ProjectDetail[]>(),
 });
 

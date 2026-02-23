@@ -1,5 +1,6 @@
 "use client";
 
+import BlurHighlight from "@/components/ui/blurHighlight";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
@@ -8,6 +9,7 @@ export type DetailItem = {
   title: string;
   description: string[];
   video?: string;
+  keywords?: string[];
 };
 
 export type Platform = "Mobile" | "Web";
@@ -150,7 +152,6 @@ function DetailSection({
     }
   };
 
-  // ✅ WEB: bigger, centered, description below, no arrow
   if (isWeb) {
     return (
       <motion.section
@@ -161,7 +162,6 @@ function DetailSection({
         className="relative"
       >
         <div className="mx-auto flex w-full max-w-[980px] flex-col items-center gap-6">
-          {/* Mac / Desktop frame (bigger) */}
           <div
             className="
               group relative w-full
@@ -189,15 +189,29 @@ function DetailSection({
             </div>
           </div>
 
-          {/* Description BELOW screen */}
           <div className="w-full max-w-[820px] text-center space-y-3">
             <h3 className="text-xl font-bold mt-5 leading-tight tracking-wide text-[#6D65FF] sm:text-[26px]">
               {item.title}
             </h3>
 
-            <ul className="mx-auto inline-block text-left list-disc space-y-1 pl-5 text-muted-foreground">
+            {/* <ul className="mx-auto inline-block text-left list-disc space-y-1 pl-5 text-muted-foreground">
               {item.description.map((d, i) => (
                 <li key={`${item.title}-desc-${i}`}>{d}</li>
+              ))}
+            </ul> */}
+            <ul className="mx-auto inline-block text-left list-disc space-y-1 pl-5 text-muted-foreground">
+              {item.description.map((d, i) => (
+                <li key={`${item.title}-desc-${i}`}>
+                  <BlurHighlight
+                    text={d}
+                    highlights={item.keywords ?? []}
+                    className="leading-relaxed"
+                    blurAmountPx={6}
+                    inactiveOpacity={0.35}
+                    highlightDelay={0.2}
+                    highlightDuration={0.8}
+                  />
+                </li>
               ))}
             </ul>
           </div>
@@ -206,7 +220,6 @@ function DetailSection({
     );
   }
 
-  // ✅ MOBILE: keep original (phone + arrow + side text)
   return (
     <motion.section
       ref={ref}
@@ -256,9 +269,24 @@ function DetailSection({
           {item.title}
         </p>
 
-        <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
+        {/* <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
           {item.description.map((d, i) => (
             <li key={`${item.title}-desc-${i}`}>{d}</li>
+          ))}
+        </ul> */}
+        <ul className="mx-auto inline-block text-left list-disc space-y-1 pl-5 text-muted-foreground">
+          {item.description.map((d, i) => (
+            <li key={`${item.title}-desc-${i}`}>
+              <BlurHighlight
+                text={d}
+                highlights={item.keywords ?? []}
+                className="leading-relaxed"
+                blurAmountPx={6}
+                inactiveOpacity={0.35}
+                highlightDelay={0.2}
+                highlightDuration={0.8}
+              />
+            </li>
           ))}
         </ul>
       </div>
