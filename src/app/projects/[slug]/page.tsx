@@ -115,7 +115,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         <FaPlayCircle className="text-lg sm:text-xl md:text-2xl text-[#6D65FF]" />
                       </BouncyIcon>
                       <span className="font-semibold text-sm sm:text-base text-muted-foreground transition-colors duration-150 group-hover:text-[#6D65FF]">
-                        Live Demo
+                        Live Website
                       </span>
                     </Link>
                   )}

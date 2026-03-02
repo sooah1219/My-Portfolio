@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -143,14 +142,14 @@ export default function ContactForm() {
         />
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button
+          {/* <Button
             asChild
             variant="outline"
             aria-label="Book an interview"
             className="w-full sm:w-auto border-[#6D65FF] text-[#6D65FF] hover:bg-[#6D65FF]/10 hover:text-[#594FEE]"
           >
             <Link href="/calendar">Book an interview</Link>
-          </Button>
+          </Button> */}
 
           <Button
             type="submit"
