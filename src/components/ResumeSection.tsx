@@ -63,7 +63,6 @@ const ResumeSection: FC = () => {
                   github.com/sooah1219
                 </Link>
                 <span>sooah1219@gmail.com</span>
-                <span>778 - 879 - 6281</span>
               </div>
             </div>
 
