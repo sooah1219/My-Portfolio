@@ -104,7 +104,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </CardTitle>
 
                 <div className="mt-1 flex items-center gap-3 sm:mt-2 md:mt-2">
-                  {project.liveUrl && (
+                  {project.platform === "Web" && project.liveUrl && (
                     <Link
                       href={project.liveUrl}
                       target="_blank"

@@ -154,7 +154,7 @@ export default function ContactForm() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full sm:w-auto bg-[#6D65FF] text-white transition-colors hover:bg-[#5951E6]"
+            className="w-full sm:w-auto bg-[#6D65FF] text-white transition-colors hover:bg-[#5951E6] cursor-pointer"
           >
             {isSubmitting ? "Sending..." : "Send message"}
           </Button>
