@@ -59,9 +59,9 @@ export default function BlurHighlight({
   text,
   highlights,
 
-  highlightColor = "#E4E3FF",
-  highlightRadiusPx = 6,
-  highlightPadXClass = "px-1",
+  highlightColor = "#6D65FF1A",
+  highlightRadiusPx = 9,
+  highlightPadXClass = "px-2",
   highlightPadYClass = "",
 
   blurAmountPx = 8,
@@ -69,7 +69,7 @@ export default function BlurHighlight({
   blurDelay = 0,
   blurDuration = 0.8,
 
-  highlightDelay = 0.4,
+  highlightDelay = 0.6,
   highlightDuration = 1,
 
   animateOnce = true,
