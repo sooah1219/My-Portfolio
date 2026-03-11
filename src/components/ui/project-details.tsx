@@ -16,7 +16,7 @@ export type Platform = "Mobile" | "Web";
 
 function PlayIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-8 w-8 fill-current" aria-hidden>
+    <svg viewBox="0 0 24 24" className="h-10 w-10 fill-current" aria-hidden>
       <path d="M8 5v14l11-7z" />
     </svg>
   );
@@ -24,7 +24,7 @@ function PlayIcon() {
 
 function PauseIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden>
+    <svg viewBox="0 0 24 24" className="h-8 w-8 fill-current" aria-hidden>
       <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
     </svg>
   );
@@ -58,8 +58,8 @@ function DeviceVideo({
             preload="metadata"
             className={
               isMac
-                ? "w-full aspect-video object-cover"
-                : "w-full h-full object-cover"
+                ? "w-full aspect-video object-cover cursor-pointer"
+                : "w-full h-full object-cover cursor-pointer"
             }
           >
             <source src={item.video} type="video/mp4" />
@@ -71,7 +71,7 @@ function DeviceVideo({
           bg-black/40
           opacity-0
           group-hover:opacity-100
-          transition-opacity duration-200
+          transition-opacity duration-200 
         "
           />
 
@@ -88,19 +88,16 @@ function DeviceVideo({
           >
             <div
               className={`
-                flex items-center justify-center
-                ${isMac ? "w-12 h-12" : "w-10 h-10"}
-                rounded-full bg-white
-                text-[#6D65FF]
-                border border-[#6D65FF]/40
-                ${
-                  isMac
-                    ? "shadow-[0_0_30px_rgba(109,101,255,0.45)]"
-                    : "shadow-[0_0_24px_rgba(109,101,255,0.45),0_0_80px_rgba(109,101,255,0.35)]"
-                }
-                transition-all duration-200
-                hover:scale-110
-              `}
+    flex items-center justify-center cursor-pointer
+    ${isMac ? "w-16 h-16" : "w-10 h-10"}
+    rounded-full bg-black
+    text-white
+    ${isMac ? "shadow-[0_10px_30px_black]" : "shadow-[0_8px_24px_black]"}
+    transition-all duration-200
+    hover:scale-110
+    hover:text-black
+    hover:bg-white
+  `}
             >
               {isPlaying ? <PauseIcon /> : <PlayIcon />}
             </div>
@@ -161,7 +158,7 @@ function DetailSection({
         transition={{ duration: 0.55, ease: "easeOut" }}
         className="relative"
       >
-        <div className="mx-auto flex w-full max-w-[980px] flex-col items-center gap-6">
+        <div className="mx-auto flex w-full max-w-[980px] flex-col items-center gap-6 ">
           <div
             className="
               group relative w-full
@@ -178,7 +175,7 @@ function DetailSection({
               <div className="ml-3 h-2 w-[180px] rounded-full bg-white/10" />
             </div>
 
-            <div className="relative overflow-hidden rounded-b-xl bg-black">
+            <div className="relative overflow-hidden rounded-b-xl bg-black ">
               <DeviceVideo
                 item={item}
                 videoRef={videoRef}
@@ -189,7 +186,7 @@ function DetailSection({
             </div>
           </div>
 
-          <div className="w-full max-w-[820px] text-center space-y-3">
+          <div className="w-full max-w-[820px] text-center space-y-6">
             <h3 className="text-xl font-bold mt-5 leading-tight tracking-wide text-[#6D65FF] sm:text-[26px]">
               {item.title}
             </h3>
