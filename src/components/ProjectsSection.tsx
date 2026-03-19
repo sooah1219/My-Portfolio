@@ -1,11 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import { projects } from "@/data/projects";
 import { db } from "@/db/client";
 import { projects } from "@/db/schema";
@@ -50,7 +44,7 @@ export async function ProjectsSection() {
               <Card
                 className="
                   flex flex-col overflow-hidden border border-border/70 bg-card/80 shadow-sm
-                  transition-all duration-400 cursor-pointer
+                  transition-all duration-400 cursor-pointer pb-5
                   hover:shadow-[0_0_15px_3px_#6D65FF]/30 hover:scale-[1.02] hover:border-[#6D65FF]
                 "
               >
@@ -105,7 +99,7 @@ export async function ProjectsSection() {
                   </div>
                 </CardContent>
 
-                <CardFooter className="mt-auto pt-0 mb-3">
+                {/* <CardFooter className="mt-auto pt-0 mb-3">
                   <span
                     className="inline-flex items-center text-sm font-medium text-primary  hover:font-semibold
             hover:text-[#6D65FF] hover:underline"
@@ -113,7 +107,7 @@ export async function ProjectsSection() {
                     See project
                     <span className="ml-1 text-xs">↗</span>
                   </span>
-                </CardFooter>
+                </CardFooter> */}
               </Card>
             </Link>
           ))}

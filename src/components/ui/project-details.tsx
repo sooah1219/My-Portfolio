@@ -90,7 +90,7 @@ function DeviceVideo({
               className={`
     flex items-center justify-center cursor-pointer
     ${isMac ? "w-16 h-16" : "w-10 h-10"}
-    rounded-full bg-black
+    rounded-full bg-black/60
     text-white
     ${isMac ? "shadow-[0_10px_30px_black]" : "shadow-[0_8px_24px_black]"}
     transition-all duration-200
@@ -310,7 +310,7 @@ export default function ProjectDetailsAuto({
         <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-muted-foreground">
           Details
         </p>
-        <h2 className="mt-2 text-2xl font-semibold text-[#6D65FF] sm:text-3xl">
+        <h2 className="mx-2 text-2xl font-semibold text-[#6D65FF] sm:text-3xl">
           Product Walkthrough
         </h2>
         <p className="mx-auto mt-3 max-w-md text-xs text-muted-foreground sm:text-sm">

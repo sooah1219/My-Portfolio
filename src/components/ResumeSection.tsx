@@ -96,10 +96,21 @@ const ResumeSection: FC = () => {
 
             <Section title="Projects">
               <Project
+                title="Tenton Ramen & Tonkatsu — Restaurant Platform"
+                period="Feb 2026 – Mar 2026"
+                role="Full stack web developer"
+                link="https://github.com/sooah1219/Tenton"
+                bullets={[
+                  "Next.js + TypeScript + PostgreSQL + Tailwind",
+                  "Designed and built a full restaurant platform integrating menu browsing, online ordering, and reservations.",
+                  "Implemented dynamic menu customization, real-time time-slot generation, and admin order management system.",
+                ]}
+              />
+              <Project
                 title="Community of Guardians — Social Platform Web"
                 period="Jan 2026 – Present"
                 role="Full stack web developer"
-                link="https://github.com/Cog-IDSP"
+                link="https://github.com/cogsadmin"
                 bullets={[
                   "React + Typescript + PostgreSQL + CSS",
                   "Worked with a real nonprofit client to define and deliver requested platform features.",
@@ -152,9 +163,9 @@ const ResumeSection: FC = () => {
               </ul>
             </Section>
 
-            <Section title="Certification">
+            {/* <Section title="Certification">
               <Row left="AWS Certified Developer – Associate" right="2025" />
-            </Section>
+            </Section> */}
           </div>
         </Card>
       </div>

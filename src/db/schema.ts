@@ -8,6 +8,18 @@ export type ProjectDetail = {
   video?: string;
 };
 
+export type ProjectArchitecture = {
+  frontend: string[];
+  api: string[];
+  database: string[];
+  platform: string[];
+};
+
+export type ProjectImprovement = {
+  title: string;
+  description: string;
+};
+
 export const projects = pgTable("projects", {
   id: uuid("id").defaultRandom().primaryKey(),
 
@@ -33,6 +45,9 @@ export const projects = pgTable("projects", {
   images: text("images").array().notNull(),
   rationale: text("rationale").array(),
   details: jsonb("details").$type<ProjectDetail[]>(),
+
+  architecture: jsonb("architecture").$type<ProjectArchitecture>(),
+  improvements: jsonb("improvements").$type<ProjectImprovement[]>(),
 });
 
 export type ProjectFromDB = typeof projects.$inferSelect;
