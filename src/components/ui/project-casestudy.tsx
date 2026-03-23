@@ -7,11 +7,15 @@ import {
   BarChart3,
   Bell,
   CalendarClock,
+  CheckCircle,
+  Clock,
   CreditCard,
   Database,
+  HelpCircle,
   LayoutDashboard,
   Monitor,
   Smartphone,
+  TrendingDown,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -212,6 +216,184 @@ function DetailSection({
   );
 }
 
+function WhyBuiltSection() {
+  return (
+    <div className="mx-auto max-w-6xl px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+        className="rounded-[24px] bg-[#F7F6ff] px-4 py-6 sm:rounded-[30px] sm:px-8 sm:py-10"
+      >
+        <div className="grid gap-4 lg:grid-cols-[90px_1fr]">
+          <div className="flex justify-center lg:hidden">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-[0_12px_30px_rgba(109,101,255,0.10)]">
+              <HelpCircle
+                className="h-7 w-7 text-[#B987FC]"
+                strokeWidth={1.8}
+              />
+            </div>
+          </div>
+
+          <div className="hidden items-start justify-center lg:flex">
+            <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white shadow-[0_12px_30px_rgba(109,101,255,0.10)]">
+              <HelpCircle
+                className="h-12 w-12 text-[#6D65FF]"
+                strokeWidth={1.8}
+              />
+            </div>
+          </div>
+
+          <div>
+            <p className="text-center lg:text-left text-[14px] leading-6 text-gray-700 sm:text-[16px]">
+              Vendor ordering depended on manually remembering schedules and
+              sending daily messages. As vendors increased, the workflow became
+              time-consuming, error-prone, and difficult to manage financially.
+              No centralized system existed to manage schedules, orders, and
+              costs in one place.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-4 sm:mt-8 sm:gap-5 lg:grid-cols-[1.25fr_0.95fr]">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.4, delay: 0.05 }}
+            className="rounded-[20px] bg-white px-5 py-5 shadow-[0_14px_35px_rgba(109,101,255,0.08)] sm:rounded-[24px] sm:px-6 sm:py-6"
+          >
+            <ul className="space-y-3 sm:space-y-4">
+              <li className="flex items-start gap-3">
+                <CheckCircle
+                  className="mt-1 h-5 w-5 shrink-0 text-[#6D65FF]"
+                  strokeWidth={2}
+                />
+                <span className="text-[15px] text-gray-700 sm:text-[16px]">
+                  Centralized vendor dashboard to manage all suppliers in one
+                  place
+                </span>
+              </li>
+
+              <li className="flex items-start gap-3">
+                <CheckCircle
+                  className="mt-1 h-5 w-5 shrink-0 text-[#6D65FF]"
+                  strokeWidth={2}
+                />
+                <span className="text-[15px] text-gray-700 sm:text-[16px]">
+                  Create orders quickly by selecting quantities from one list
+                </span>
+              </li>
+
+              <li className="flex items-start gap-3">
+                <CheckCircle
+                  className="mt-1 h-5 w-5 shrink-0 text-[#6D65FF]"
+                  strokeWidth={2}
+                />
+                <span className="text-[15px] text-gray-700 sm:text-[16px]">
+                  Reduce repetitive typing and item-checking time
+                </span>
+              </li>
+            </ul>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="rounded-[20px] bg-gradient-to-r from-[#6D65FF] to-[#8C84FF] px-5 py-5 text-white shadow-[0_14px_35px_rgba(185,135,252,0.28)] sm:rounded-[24px] sm:px-6 sm:py-6"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center justify-center">
+                <Clock
+                  className="h-12 w-12 text-white sm:h-16 sm:w-16"
+                  strokeWidth={2}
+                />
+              </div>
+
+              <div className="text-right">
+                <div className="text-[16px] font-semibold text-white sm:text-[18px]">
+                  Time saved daily
+                </div>
+
+                <div className="mt-1 text-[32px] font-bold leading-none tracking-tight text-white sm:text-[40px]">
+                  70 – 80%
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 text-[24px] font-semibold sm:mt-7 sm:text-[28px]">
+              ~3hrs/week
+            </div>
+            <div className="text-[17px] font-medium text-white/90 sm:text-[20px]">
+              Operations Reduced
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            className="flex min-h-[170px] flex-col justify-center rounded-[20px] bg-gradient-to-br from-[#B987FC] to-[#9D70F4] px-5 py-5 text-white shadow-[0_14px_35px_rgba(185,135,252,0.28)] sm:min-h-[190px] sm:rounded-[24px] sm:px-6 sm:py-6"
+          >
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div className="text-[32px] font-bold leading-none sm:text-[38px]">
+                50% +
+              </div>
+
+              <TrendingDown
+                className="h-12 w-12 shrink-0 text-white sm:h-16 sm:w-16"
+                strokeWidth={2.2}
+              />
+            </div>
+
+            <div className="text-[16px] font-semibold sm:text-[18px]">
+              Order Errors Decreased
+            </div>
+
+            <div className="mt-2 text-[15px] font-medium text-white/90 sm:mt-3 sm:text-[16px]">
+              Prevent order missing
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="flex min-h-[170px] flex-col justify-center rounded-[20px] bg-white px-5 py-5 shadow-[0_14px_35px_rgba(109,101,255,0.08)] sm:min-h-[190px] sm:rounded-[24px] sm:px-6 sm:py-6"
+          >
+            <ul className="space-y-3 sm:space-y-4">
+              <li className="flex items-start gap-3">
+                <CheckCircle
+                  className="mt-1 h-5 w-5 shrink-0 text-[#6D65FF]"
+                  strokeWidth={2}
+                />
+                <span className="text-[15px] leading-6 text-gray-700 sm:text-[16px]">
+                  Day-based filtering to instantly see which vendors need orders
+                </span>
+              </li>
+
+              <li className="flex items-start gap-3">
+                <CheckCircle
+                  className="mt-1 h-5 w-5 shrink-0 text-[#6D65FF]"
+                  strokeWidth={2}
+                />
+                <span className="text-[15px] leading-6 text-gray-700 sm:text-[16px]">
+                  Real-time visibility into total order cost
+                </span>
+              </li>
+            </ul>
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 function FutureImprovementsSection({
   improvements,
 }: {
@@ -262,9 +444,25 @@ export default function ProjectCaseStudy({
 
   return (
     <section id="details" className="scroll-mt-24">
+      <div className="mx-auto mt-20 mb-12 h-px w-full max-w-4xl bg-gradient-to-r from-transparent via-[#6D65FF]/30 to-transparent" />
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+        className="mb-4 text-center sm:mb-12"
+      >
+        <h3 className="text-2xl font-semibold text-[#6D65FF] sm:text-3xl">
+          Why This System Was Built
+        </h3>
+      </motion.div>
+
+      <WhyBuiltSection />
+
       {!!architecture && (
         <>
-          <div className="mx-auto mt-20 mb-12 h-px w-full max-w-4xl bg-gradient-to-r from-transparent via-[#6D65FF]/30 to-transparent" />
+          <div className="mx-auto my-12 h-px w-full max-w-4xl bg-gradient-to-r from-transparent via-[#6D65FF]/30 to-transparent" />
 
           <motion.div
             initial={{ opacity: 0, y: 12 }}
