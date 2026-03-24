@@ -20,6 +20,14 @@ export type ProjectImprovement = {
   description: string;
 };
 
+export type ProblemMetric = {
+  icon?: "clock" | "trending-down";
+  title: string;
+  value: string;
+  subtitle?: string;
+  description?: string;
+};
+
 export const projects = pgTable("projects", {
   id: uuid("id").defaultRandom().primaryKey(),
 
@@ -48,6 +56,10 @@ export const projects = pgTable("projects", {
 
   architecture: jsonb("architecture").$type<ProjectArchitecture>(),
   improvements: jsonb("improvements").$type<ProjectImprovement[]>(),
+
+  problem: jsonb("problem").$type<string[]>(),
+  problem_intro: text("problem_intro"),
+  problem_metrics: jsonb("problem_metrics").$type<ProblemMetric[]>(),
 });
 
 export type ProjectFromDB = typeof projects.$inferSelect;

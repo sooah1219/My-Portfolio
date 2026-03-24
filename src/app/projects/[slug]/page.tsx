@@ -297,8 +297,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             platform={project.platform}
           />
           <ProjectCaseStudy
+            title={project.title}
             architecture={project.architecture}
             improvements={project.improvements}
+            problem={project.problem}
+            problem_intro={project.problem_intro}
+            problem_metrics={project.problem_metrics}
           />
         </div>
       </section>

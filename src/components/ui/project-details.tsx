@@ -1,9 +1,9 @@
 "use client";
 
 import BlurHighlight from "@/components/ui/blurHighlight";
-import { motion, useInView } from "framer-motion";
-import Image from "next/image";
-import React, { useRef, useState } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useMemo, useRef, useState } from "react";
 
 export type DetailItem = {
   title: string;
@@ -55,7 +55,7 @@ function DeviceVideo({
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             className={
               isMac
                 ? "w-full aspect-video object-cover cursor-pointer"
@@ -67,12 +67,11 @@ function DeviceVideo({
 
           <div
             className="
-          pointer-events-none absolute inset-0
-          bg-black/40
-          opacity-0
-          group-hover:opacity-100
-          transition-opacity duration-200 
-        "
+              pointer-events-none absolute inset-0
+              bg-black/40 opacity-0
+              group-hover:opacity-100
+              transition-opacity duration-200
+            "
           />
 
           <button
@@ -89,13 +88,23 @@ function DeviceVideo({
             <div
               className={`
     flex items-center justify-center cursor-pointer
-    ${isMac ? "w-16 h-16" : "w-10 h-10"}
-    rounded-full bg-black/60
-    text-white
-    ${isMac ? "shadow-[0_10px_30px_black]" : "shadow-[0_8px_24px_black]"}
+    ${isMac ? "h-16 w-16" : "h-10 w-10"}
+
+    rounded-full
+    bg-white/70
+    backdrop-blur-md
+    border border-white/40
+
+    text-black
+
+    ${
+      isMac
+        ? "shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
+        : "shadow-[0_8px_24px_rgba(0,0,0,0.18)]"
+    }
+
     transition-all duration-200
     hover:scale-110
-    hover:text-black
     hover:bg-white
   `}
             >
@@ -118,24 +127,22 @@ function DeviceVideo({
   );
 }
 
-function DetailSection({
-  item,
-  isLeft,
-  platform,
+function DetailCarousel({
+  items,
+  device,
 }: {
-  item: DetailItem;
-  isLeft: boolean;
-  platform: Platform;
+  items: DetailItem[];
+  device: "mac" | "phone";
 }) {
   const ref = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const inView = useInView(ref, { amount: 0.35, once: true });
-  const offsetX = isLeft ? -40 : 40;
+  const inView = useInView(ref, { amount: 0.2, once: true });
+  const currentItem = useMemo(() => items[currentIndex], [items, currentIndex]);
 
-  const p = String(platform).toLowerCase();
-  const isWeb = p === "web";
+  const isWeb = device === "mac";
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -149,143 +156,257 @@ function DetailSection({
     }
   };
 
-  if (isWeb) {
-    return (
-      <motion.section
-        ref={ref}
-        initial={{ opacity: 0, y: 16 }}
-        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-        transition={{ duration: 0.55, ease: "easeOut" }}
-        className="relative"
-      >
-        <div className="mx-auto flex w-full max-w-[980px] flex-col items-center gap-6 ">
-          <div
-            className="
-              group relative w-full
-              rounded-2xl bg-black p-[10px]
-              transition-all duration-300
-              shadow-[0_0_18px_rgba(109,101,255,0.22)]
-              group-hover:shadow-[0_0_28px_rgba(109,101,255,0.65),0_0_140px_rgba(109,101,255,0.40)]
-            "
-          >
-            <div className="flex items-center gap-2 rounded-t-xl bg-neutral-900 px-4 py-3">
-              <span className="h-3 w-3 rounded-full bg-red-500" />
-              <span className="h-3 w-3 rounded-full bg-yellow-500" />
-              <span className="h-3 w-3 rounded-full bg-green-500" />
-              <div className="ml-3 h-2 w-[180px] rounded-full bg-white/10" />
-            </div>
+  const goPrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
+    setIsPlaying(true);
+  };
 
-            <div className="relative overflow-hidden rounded-b-xl bg-black ">
-              <DeviceVideo
-                item={item}
-                videoRef={videoRef}
-                isPlaying={isPlaying}
-                togglePlay={togglePlay}
-                variant="mac"
-              />
-            </div>
-          </div>
+  const goNext = () => {
+    setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
+    setIsPlaying(true);
+  };
 
-          <div className="w-full max-w-[820px] text-center space-y-6">
-            <h3 className="text-xl font-bold mt-5 leading-tight tracking-wide text-[#6D65FF] sm:text-[26px]">
-              {item.title}
-            </h3>
+  const goTo = (index: number) => {
+    setCurrentIndex(index);
+    setIsPlaying(true);
+  };
 
-            {/* <ul className="mx-auto inline-block text-left list-disc space-y-1 pl-5 text-muted-foreground">
-              {item.description.map((d, i) => (
-                <li key={`${item.title}-desc-${i}`}>{d}</li>
-              ))}
-            </ul> */}
-            <ul className="mx-auto inline-block text-left list-disc space-y-1 pl-5 text-muted-foreground">
-              {item.description.map((d, i) => (
-                <li key={`${item.title}-desc-${i}`}>
-                  <BlurHighlight
-                    text={d}
-                    highlights={item.keywords ?? []}
-                    className="leading-relaxed"
-                    blurAmountPx={6}
-                    inactiveOpacity={0.35}
-                    highlightDelay={0.2}
-                    highlightDuration={0.8}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </motion.section>
-    );
-  }
+  if (!items.length) return null;
 
   return (
     <motion.section
       ref={ref}
-      initial={{ opacity: 0, x: offsetX }}
-      animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: offsetX }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.55, ease: "easeOut" }}
-      className="relative grid grid-cols-1 items-center gap-10 md:grid-cols-2"
+      className="relative"
     >
-      <Image
-        src="/images/arrow.png"
-        alt=""
-        aria-hidden
-        width={100}
-        height={100}
-        className={`
-          pointer-events-none absolute z-20 hidden md:block
-          top-1/4 -translate-y-1/2 opacity-80
-          ${isLeft ? "left-[380px]" : "right-[380px] scale-x-[-1]"}
-        `}
-      />
-
-      <div className={isLeft ? "order-1" : "order-1 md:order-2"}>
-        <div
-          className="
-            group relative mx-auto w-full
-            max-w-[220px] sm:max-w-[260px] md:max-w-[300px]
-            rounded-[2rem] bg-black p-[6px]
-            transition-all duration-300
-            shadow-[0_0_18px_rgba(109,101,255,0.22)]
-            group-hover:shadow-[0_0_28px_rgba(109,101,255,0.65),0_0_120px_rgba(109,101,255,0.40),0_0_220px_rgba(109,101,255,0.22)]
-          "
-        >
-          <div className="relative overflow-hidden rounded-[1.6rem] bg-black">
-            <DeviceVideo
-              item={item}
-              videoRef={videoRef}
-              isPlaying={isPlaying}
-              togglePlay={togglePlay}
-              variant="phone"
-            />
-          </div>
-        </div>
+      <div className="sr-only">
+        {items.map(
+          (item, i) =>
+            item.video && (
+              <video key={`preload-${i}`} preload="auto" muted playsInline>
+                <source src={item.video} type="video/mp4" />
+              </video>
+            )
+        )}
       </div>
 
-      <div className={`${isLeft ? "order-2" : "order-2 md:order-1"} space-y-3`}>
-        <p className="text-[18px] font-bold leading-tight tracking-wide text-[#6D65FF]">
-          {item.title}
-        </p>
+      <div
+        className="
+          relative overflow-hidden rounded-[28px]
+          bg-[#F7F6ff]
+          px-5 py-7
+          sm:px-7 sm:py-8
+          md:px-10 md:py-10
+        "
+      >
+        <button
+          type="button"
+          onClick={goPrev}
+          aria-label="Previous"
+          className="
+            absolute left-3 top-1/2 z-20 flex -translate-y-1/2
+            h-10 w-10 items-center justify-center rounded-full
+            border-2 border-[#6D65FF]/30 text-[#6D65FF]/60 bg-white shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all duration-200 hover:border-[#6D65FF]/60 cursor-pointer
+            sm:left-5 sm:h-12 sm:w-12
+          "
+        >
+          <ChevronLeft className="h-5 w-5 sm:h-7 sm:w-7" />
+        </button>
 
-        {/* <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
-          {item.description.map((d, i) => (
-            <li key={`${item.title}-desc-${i}`}>{d}</li>
-          ))}
-        </ul> */}
-        <ul className="mx-auto inline-block text-left list-disc space-y-1 pl-5 text-muted-foreground">
-          {item.description.map((d, i) => (
-            <li key={`${item.title}-desc-${i}`}>
-              <BlurHighlight
-                text={d}
-                highlights={item.keywords ?? []}
-                className="leading-relaxed"
-                blurAmountPx={6}
-                inactiveOpacity={0.35}
-                highlightDelay={0.2}
-                highlightDuration={0.8}
+        <button
+          type="button"
+          onClick={goNext}
+          aria-label="Next"
+          className="
+            absolute right-3 top-1/2 z-20 flex -translate-y-1/2
+            h-10 w-10 items-center justify-center rounded-full
+            border-2 border-[#6D65FF]/30 text-[#6D65FF]/60 bg-white shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all duration-200 hover:border-[#6D65FF]/60 cursor-pointer
+            sm:right-5 sm:h-12 sm:w-12
+          "
+        >
+          <ChevronRight className="h-5 w-5 sm:h-7 sm:w-7" />
+        </button>
+
+        {isWeb ? (
+          <div className="mx-auto flex w-full max-w-[780px] flex-col items-center gap-8 md:px-8">
+            <div className="w-full">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={`mac-${currentIndex}`}
+                  initial={{ opacity: 0, scale: 0.992 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.008 }}
+                  transition={{ duration: 0.28, ease: "easeOut" }}
+                  className="w-full"
+                >
+                  <div
+                    className="
+                      group relative w-full
+                      rounded-2xl bg-black p-[10px]
+                      shadow-[0_18px_40px_rgba(0,0,0,0.08)]
+                    "
+                  >
+                    <div className="flex items-center gap-2 rounded-t-xl bg-neutral-900 px-4 py-3">
+                      <span className="h-3 w-3 rounded-full bg-red-500" />
+                      <span className="h-3 w-3 rounded-full bg-yellow-500" />
+                      <span className="h-3 w-3 rounded-full bg-green-500" />
+                      <div className="ml-3 h-2 w-[180px] rounded-full bg-white/10" />
+                    </div>
+
+                    <div className="relative overflow-hidden rounded-b-xl bg-black">
+                      <DeviceVideo
+                        item={currentItem}
+                        videoRef={videoRef}
+                        isPlaying={isPlaying}
+                        togglePlay={togglePlay}
+                        variant="mac"
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <div className="w-full">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={`web-content-${currentIndex}`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  className="mx-auto max-w-[620px] px-2 text-left sm:px-14 md:px-0"
+                >
+                  <p
+                    className="
+                    text-[46px] font-semibold leading-none tracking-tight
+                    text-[#6D65FF]/80
+                    text-center md:text-left
+                    sm:text-[40px] md:text-[60px]
+                    "
+                  >
+                    {String(currentIndex + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className="mt-2 text-[24px] font-medium tracking-[-0.02em] text-black text-center md:text-left sm:text-[36px] md:text-[28px]">
+                    {currentItem.title}
+                  </h3>
+
+                  <ul
+                    className="
+                    mt-4 inline-block space-y-1
+                    text-center md:text-left
+                    text-muted-foreground
+                    "
+                  >
+                    {currentItem.description.map((d, i) => (
+                      <li
+                        key={`${currentItem.title}-desc-${i}`}
+                        className="leading-relaxed"
+                      >
+                        <BlurHighlight
+                          text={d}
+                          highlights={currentItem.keywords ?? []}
+                          className="leading-relaxed"
+                          blurAmountPx={6}
+                          inactiveOpacity={0.35}
+                          highlightDelay={0.2}
+                          highlightDuration={0.8}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-[minmax(260px,340px)_1fr] md:gap-4 md:px-8">
+            <div className="order-2 md:order-1">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={`phone-${currentIndex}`}
+                  initial={{ opacity: 0, scale: 0.992 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.008 }}
+                  transition={{ duration: 0.28, ease: "easeOut" }}
+                  className="mx-auto flex w-full justify-center"
+                >
+                  <div className="w-full max-w-[220px] sm:max-w-[250px] md:max-w-[300px]">
+                    <div
+                      className="
+                        group relative rounded-[2.2rem]
+                        bg-black/80 p-[8px]
+                        shadow-[0_18px_40px_rgba(0,0,0,0.08)]
+                      "
+                    >
+                      <div className="relative overflow-hidden rounded-[1.8rem] bg-black">
+                        <DeviceVideo
+                          item={currentItem}
+                          videoRef={videoRef}
+                          isPlaying={isPlaying}
+                          togglePlay={togglePlay}
+                          variant="phone"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <div className="order-1 md:order-2">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={`content-${currentIndex}`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  className="mx-auto max-w-[620px] px-2 text-left sm:px-14 md:px-0"
+                >
+                  <p className="text-[46px] font-semibold leading-none tracking-tight text-[#6D65FF]/80 sm:text-[40px] md:text-[60px]">
+                    {String(currentIndex + 1).padStart(2, "0")}
+                  </p>
+
+                  <h3 className="mt-2 text-[24px] font-medium tracking-[-0.02em] text-black sm:text-[36px] md:text-[28px]">
+                    {currentItem.title}
+                  </h3>
+
+                  <ul className="mt-4 inline-block space-y-1 text-left text-muted-foreground">
+                    {currentItem.description.map((d, i) => (
+                      <li
+                        key={`${currentItem.title}-desc-${i}`}
+                        className="leading-relaxed"
+                      >
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        )}
+
+        <div className="mt-8 flex items-center justify-center gap-3">
+          {items.map((_, index) => {
+            const isActive = index === currentIndex;
+
+            return (
+              <button
+                key={`indicator-${index}`}
+                type="button"
+                aria-label={`Go to slide ${index + 1}`}
+                onClick={() => goTo(index)}
+                className={`h-[4px] rounded-full transition-all duration-300 cursor-pointer ${
+                  isActive ? "w-14 bg-[#6D65FF]/70" : "w-8 bg-[#6D65FF]/30"
+                }`}
               />
-            </li>
-          ))}
-        </ul>
+            );
+          })}
+        </div>
       </div>
     </motion.section>
   );
@@ -298,6 +419,9 @@ export default function ProjectDetailsAuto({
   items: DetailItem[];
   platform: Platform;
 }) {
+  const p = String(platform).toLowerCase();
+  const isWeb = p === "web";
+
   return (
     <section id="details" className="scroll-mt-24">
       <motion.div
@@ -319,16 +443,7 @@ export default function ProjectDetailsAuto({
         </p>
       </motion.div>
 
-      <div className="space-y-24">
-        {items.map((item, i) => (
-          <DetailSection
-            key={`${item.title}-${i}`}
-            item={item}
-            isLeft={i % 2 === 0}
-            platform={platform}
-          />
-        ))}
-      </div>
+      <DetailCarousel items={items} device={isWeb ? "mac" : "phone"} />
     </section>
   );
 }

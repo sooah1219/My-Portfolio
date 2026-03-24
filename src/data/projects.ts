@@ -22,6 +22,10 @@ export type Project = {
   images: string[];
   rationale?: string[] | null;
   details?: ProjectDetail[] | null;
+
+  problem?: string | null;
+  problem_intro?: string | null;
+  problem_metrics?: string | null;
 };
 
 // export const projects: Project[] = [
