@@ -1,5 +1,6 @@
 "use client";
 
+import { ProblemMetric } from "@/db/schema";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import Image from "next/image";
@@ -8,7 +9,6 @@ import DetailSection from "./DetailSection";
 import ForgeSection from "./ForgeSection";
 import FutureImprovementsSection from "./FutureImprovementsSection";
 import WhyBuiltSection from "./WhyBuiltSection";
-import { ProblemMetric } from "@/db/schema";
 
 type ProjectArchitecture = {
   frontend: string[];
@@ -141,6 +141,35 @@ export default function ProjectCaseStudy({
                   className="h-full w-full object-cover p-7"
                 />
               </motion.div>
+              <div className="mx-auto my-20 h-px w-full max-w-4xl bg-gradient-to-r from-transparent via-[#6D65FF]/30 to-transparent" />
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4 }}
+                className="mb-10 text-center sm:mb-20"
+              >
+                <h3 className="text-2xl font-semibold text-[#6D65FF] sm:text-3xl">
+                  User Persona
+                </h3>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={{ duration: 0.45, delay: 0.08 }}
+                className="group relative overflow-hidden rounded-[24px] border border-[#6D65FF]/15 bg-white shadow-[0_16px_40px_rgba(109,101,255,0.08)]"
+              >
+                <Image
+                  src="/images/forge/user.png"
+                  alt="Forge User"
+                  width={1200}
+                  height={800}
+                  className="h-full w-full object-cover"
+                />
+              </motion.div>
 
               <div className="mx-auto my-20 h-px w-full max-w-4xl bg-gradient-to-r from-transparent via-[#6D65FF]/30 to-transparent" />
 
@@ -207,7 +236,7 @@ export default function ProjectCaseStudy({
                 className="group relative overflow-hidden rounded-[24px] border border-[#6D65FF]/15 bg-white shadow-[0_16px_40px_rgba(109,101,255,0.08)]"
               >
                 <Image
-                  src="/images/HighFi.png"
+                  src="/images/forge/HighFi.png"
                   alt="Forge Highfi"
                   width={1200}
                   height={800}

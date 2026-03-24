@@ -3,7 +3,7 @@
 import BlurHighlight from "@/components/ui/blurHighlight";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 export type DetailItem = {
   title: string;
@@ -51,6 +51,7 @@ function DeviceVideo({
         <>
           <video
             ref={videoRef}
+            src={item.video}
             autoPlay
             muted
             loop
@@ -61,9 +62,7 @@ function DeviceVideo({
                 ? "w-full aspect-video object-cover cursor-pointer"
                 : "w-full h-full object-cover cursor-pointer"
             }
-          >
-            <source src={item.video} type="video/mp4" />
-          </video>
+          />
 
           <div
             className="
@@ -87,26 +86,22 @@ function DeviceVideo({
           >
             <div
               className={`
-    flex items-center justify-center cursor-pointer
-    ${isMac ? "h-16 w-16" : "h-10 w-10"}
-
-    rounded-full
-    bg-white/70
-    backdrop-blur-md
-    border border-white/40
-
-    text-black
-
-    ${
-      isMac
-        ? "shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
-        : "shadow-[0_8px_24px_rgba(0,0,0,0.18)]"
-    }
-
-    transition-all duration-200
-    hover:scale-110
-    hover:bg-white
-  `}
+                flex items-center justify-center cursor-pointer
+                ${isMac ? "h-16 w-16" : "h-10 w-10"}
+                rounded-full
+                bg-white/70
+                backdrop-blur-md
+                border border-white/40
+                text-black
+                ${
+                  isMac
+                    ? "shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
+                    : "shadow-[0_8px_24px_rgba(0,0,0,0.18)]"
+                }
+                transition-all duration-200
+                hover:scale-110
+                hover:bg-white
+              `}
             >
               {isPlaying ? <PauseIcon /> : <PlayIcon />}
             </div>
@@ -136,6 +131,7 @@ function DetailCarousel({
 }) {
   const ref = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -145,13 +141,17 @@ function DetailCarousel({
   const isWeb = device === "mac";
 
   const togglePlay = () => {
-    if (!videoRef.current) return;
+    const video = videoRef.current;
+    if (!video) return;
 
-    if (videoRef.current.paused) {
-      videoRef.current.play();
+    if (video.paused) {
+      const playPromise = video.play();
+      if (playPromise) {
+        playPromise.catch(() => {});
+      }
       setIsPlaying(true);
     } else {
-      videoRef.current.pause();
+      video.pause();
       setIsPlaying(false);
     }
   };
@@ -171,6 +171,18 @@ function DetailCarousel({
     setIsPlaying(true);
   };
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !currentItem?.video) return;
+
+    video.currentTime = 0;
+    video.load();
+
+    const playPromise = video.play();
+    if (playPromise) {
+      playPromise.catch(() => {});
+    }
+  }, [currentIndex, currentItem?.video]);
   if (!items.length) return null;
 
   return (
@@ -208,7 +220,9 @@ function DetailCarousel({
           className="
             absolute left-3 top-1/2 z-20 flex -translate-y-1/2
             h-10 w-10 items-center justify-center rounded-full
-            border-2 border-[#6D65FF]/30 text-[#6D65FF]/60 bg-white shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all duration-200 hover:border-[#6D65FF]/60 cursor-pointer
+            border-2 border-[#6D65FF]/30 text-[#6D65FF]/60 bg-white
+            shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all
+            duration-200 hover:border-[#6D65FF]/60 cursor-pointer
             sm:left-5 sm:h-12 sm:w-12
           "
         >
@@ -222,7 +236,9 @@ function DetailCarousel({
           className="
             absolute right-3 top-1/2 z-20 flex -translate-y-1/2
             h-10 w-10 items-center justify-center rounded-full
-            border-2 border-[#6D65FF]/30 text-[#6D65FF]/60 bg-white shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all duration-200 hover:border-[#6D65FF]/60 cursor-pointer
+            border-2 border-[#6D65FF]/30 text-[#6D65FF]/60 bg-white
+            shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all
+            duration-200 hover:border-[#6D65FF]/60 cursor-pointer
             sm:right-5 sm:h-12 sm:w-12
           "
         >
@@ -232,41 +248,32 @@ function DetailCarousel({
         {isWeb ? (
           <div className="mx-auto flex w-full max-w-[780px] flex-col items-center gap-8 md:px-8">
             <div className="w-full">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={`mac-${currentIndex}`}
-                  initial={{ opacity: 0, scale: 0.992 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.008 }}
-                  transition={{ duration: 0.28, ease: "easeOut" }}
-                  className="w-full"
+              <div className="w-full">
+                <div
+                  className="
+                    group relative w-full
+                    rounded-2xl bg-black p-[10px]
+                    shadow-[0_18px_40px_rgba(0,0,0,0.08)]
+                  "
                 >
-                  <div
-                    className="
-                      group relative w-full
-                      rounded-2xl bg-black p-[10px]
-                      shadow-[0_18px_40px_rgba(0,0,0,0.08)]
-                    "
-                  >
-                    <div className="flex items-center gap-2 rounded-t-xl bg-neutral-900 px-4 py-3">
-                      <span className="h-3 w-3 rounded-full bg-red-500" />
-                      <span className="h-3 w-3 rounded-full bg-yellow-500" />
-                      <span className="h-3 w-3 rounded-full bg-green-500" />
-                      <div className="ml-3 h-2 w-[180px] rounded-full bg-white/10" />
-                    </div>
-
-                    <div className="relative overflow-hidden rounded-b-xl bg-black">
-                      <DeviceVideo
-                        item={currentItem}
-                        videoRef={videoRef}
-                        isPlaying={isPlaying}
-                        togglePlay={togglePlay}
-                        variant="mac"
-                      />
-                    </div>
+                  <div className="flex items-center gap-2 rounded-t-xl bg-neutral-900 px-4 py-3">
+                    <span className="h-3 w-3 rounded-full bg-red-500" />
+                    <span className="h-3 w-3 rounded-full bg-yellow-500" />
+                    <span className="h-3 w-3 rounded-full bg-green-500" />
+                    <div className="ml-3 h-2 w-[180px] rounded-full bg-white/10" />
                   </div>
-                </motion.div>
-              </AnimatePresence>
+
+                  <div className="relative overflow-hidden rounded-b-xl bg-black">
+                    <DeviceVideo
+                      item={currentItem}
+                      videoRef={videoRef}
+                      isPlaying={isPlaying}
+                      togglePlay={togglePlay}
+                      variant="mac"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="w-full">
@@ -281,23 +288,24 @@ function DetailCarousel({
                 >
                   <p
                     className="
-                    text-[46px] font-semibold leading-none tracking-tight
-                    text-[#6D65FF]/80
-                    text-center md:text-left
-                    sm:text-[40px] md:text-[60px]
+                      text-[46px] font-semibold leading-none tracking-tight
+                      text-[#6D65FF]/80
+                      text-center md:text-left
+                      sm:text-[40px] md:text-[60px]
                     "
                   >
                     {String(currentIndex + 1).padStart(2, "0")}
                   </p>
+
                   <h3 className="mt-2 text-[24px] font-medium tracking-[-0.02em] text-black text-center md:text-left sm:text-[36px] md:text-[28px]">
                     {currentItem.title}
                   </h3>
 
                   <ul
                     className="
-                    mt-4 inline-block space-y-1
-                    text-center md:text-left
-                    text-muted-foreground
+                      mt-4 inline-block space-y-1
+                      text-center md:text-left
+                      text-muted-foreground
                     "
                   >
                     {currentItem.description.map((d, i) => (
@@ -324,36 +332,27 @@ function DetailCarousel({
         ) : (
           <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-[minmax(260px,340px)_1fr] md:gap-4 md:px-8">
             <div className="order-2 md:order-1">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={`phone-${currentIndex}`}
-                  initial={{ opacity: 0, scale: 0.992 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.008 }}
-                  transition={{ duration: 0.28, ease: "easeOut" }}
-                  className="mx-auto flex w-full justify-center"
-                >
-                  <div className="w-full max-w-[220px] sm:max-w-[250px] md:max-w-[300px]">
-                    <div
-                      className="
-                        group relative rounded-[2.2rem]
-                        bg-black/80 p-[8px]
-                        shadow-[0_18px_40px_rgba(0,0,0,0.08)]
-                      "
-                    >
-                      <div className="relative overflow-hidden rounded-[1.8rem] bg-black">
-                        <DeviceVideo
-                          item={currentItem}
-                          videoRef={videoRef}
-                          isPlaying={isPlaying}
-                          togglePlay={togglePlay}
-                          variant="phone"
-                        />
-                      </div>
+              <div className="mx-auto flex w-full justify-center">
+                <div className="w-full max-w-[220px] sm:max-w-[250px] md:max-w-[300px]">
+                  <div
+                    className="
+                      group relative rounded-[2.2rem]
+                      bg-black/80 p-[8px]
+                      shadow-[0_18px_40px_rgba(0,0,0,0.08)]
+                    "
+                  >
+                    <div className="relative overflow-hidden rounded-[1.8rem] bg-black">
+                      <DeviceVideo
+                        item={currentItem}
+                        videoRef={videoRef}
+                        isPlaying={isPlaying}
+                        togglePlay={togglePlay}
+                        variant="phone"
+                      />
                     </div>
                   </div>
-                </motion.div>
-              </AnimatePresence>
+                </div>
+              </div>
             </div>
 
             <div className="order-1 md:order-2">
