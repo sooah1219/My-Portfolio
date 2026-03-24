@@ -4,6 +4,14 @@ export type ProjectDetail = {
   video?: string;
 };
 
+export type ProblemMetric = {
+  icon?: "clock" | "trending-down";
+  title: string;
+  value: string;
+  subtitle?: string;
+  description?: string;
+};
+
 export type Project = {
   id: string;
   slug: string;
@@ -23,9 +31,9 @@ export type Project = {
   rationale?: string[] | null;
   details?: ProjectDetail[] | null;
 
-  problem?: string | null;
+  problem?: string[] | null;
   problem_intro?: string | null;
-  problem_metrics?: string | null;
+  problem_metrics?: ProblemMetric[] | null;
 };
 
 // export const projects: Project[] = [
