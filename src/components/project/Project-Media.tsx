@@ -1,22 +1,22 @@
 "use client";
 
-import BlurHighlight from "@/components/ui/blurHighlight";
+import BlurHighlight from "@/components/ui/blurHighlight"; // adjust path if needed
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-export type DetailItem = {
+type Platform = "Web" | "Mobile" | string;
+
+type DetailItem = {
   title: string;
   description: string[];
   video?: string;
   keywords?: string[];
 };
 
-export type Platform = "Mobile" | "Web";
-
 function PlayIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-10 w-10 fill-current" aria-hidden>
+    <svg viewBox="0 0 24 24" className="h-8 w-8 fill-current" aria-hidden>
       <path d="M8 5v14l11-7z" />
     </svg>
   );
@@ -24,50 +24,86 @@ function PlayIcon() {
 
 function PauseIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-8 w-8 fill-current" aria-hidden>
-      <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+    <svg viewBox="0 0 24 24" className="h-7 w-7 fill-current" aria-hidden>
+      <path d="M7 5h3v14H7zm7 0h3v14h-3z" />
     </svg>
   );
 }
 
-function DeviceVideo({
-  item,
-  videoRef,
+function DeviceVideoStack({
+  items,
+  currentIndex,
   isPlaying,
   togglePlay,
   variant,
+  setVideoRef,
 }: {
-  item: DetailItem;
-  videoRef: React.RefObject<HTMLVideoElement | null>;
+  items: DetailItem[];
+  currentIndex: number;
   isPlaying: boolean;
   togglePlay: () => void;
   variant: "mac" | "phone";
+  setVideoRef: (index: number, node: HTMLVideoElement | null) => void;
 }) {
   const isMac = variant === "mac";
 
   return (
     <>
-      {item.video ? (
+      {items.some((item) => item.video) ? (
         <>
-          <video
-            ref={videoRef}
-            src={item.video}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className={
-              isMac
-                ? "w-full aspect-video object-cover cursor-pointer"
-                : "w-full h-full object-cover cursor-pointer"
-            }
-          />
+          <div className="absolute inset-0">
+            {items.map((item, index) => {
+              const isActive = index === currentIndex;
+
+              if (!item.video) {
+                return (
+                  <div
+                    key={`video-fallback-${index}`}
+                    className={`
+                      absolute inset-0 bg-black transition-opacity duration-300
+                      ${
+                        isActive
+                          ? "opacity-100"
+                          : "pointer-events-none opacity-0"
+                      }
+                    `}
+                    aria-hidden={!isActive}
+                  />
+                );
+              }
+
+              return (
+                <video
+                  key={`video-${index}-${item.video}`}
+                  ref={(node) => setVideoRef(index, node)}
+                  src={item.video}
+                  muted
+                  loop
+                  playsInline
+                  preload={index === currentIndex ? "auto" : "metadata"}
+                  className={`
+                    absolute inset-0
+                    ${
+                      isMac
+                        ? "h-full w-full object-cover"
+                        : "h-full w-full object-cover"
+                    }
+                    transition-opacity duration-300
+                    ${
+                      isActive ? "opacity-100" : "pointer-events-none opacity-0"
+                    }
+                  `}
+                  onClick={togglePlay}
+                  aria-hidden={!isActive}
+                />
+              );
+            })}
+          </div>
 
           <div
             className="
               pointer-events-none absolute inset-0
-              bg-black/40 opacity-0
+              bg-black/20 opacity-0
               group-hover:opacity-100
               transition-opacity duration-200
             "
@@ -99,8 +135,7 @@ function DeviceVideo({
                     : "shadow-[0_8px_24px_rgba(0,0,0,0.18)]"
                 }
                 transition-all duration-200
-                hover:scale-110
-                hover:bg-white
+                hover:scale-110 hover:bg-white
               `}
             >
               {isPlaying ? <PauseIcon /> : <PlayIcon />}
@@ -110,9 +145,7 @@ function DeviceVideo({
       ) : (
         <div
           className={
-            isMac
-              ? "w-full aspect-video bg-black"
-              : "w-full aspect-[9/19.5] bg-black"
+            isMac ? "absolute inset-0 bg-black" : "absolute inset-0 bg-black"
           }
         />
       )}
@@ -130,7 +163,7 @@ function DetailCarousel({
   device: "mac" | "phone";
 }) {
   const ref = useRef<HTMLElement | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -140,79 +173,93 @@ function DetailCarousel({
 
   const isWeb = device === "mac";
 
-  const togglePlay = () => {
-    const video = videoRef.current;
-    if (!video) return;
+  const setVideoRef = useCallback(
+    (index: number, node: HTMLVideoElement | null) => {
+      videoRefs.current[index] = node;
+    },
+    []
+  );
 
-    if (video.paused) {
-      const playPromise = video.play();
-      if (playPromise) {
-        playPromise.catch(() => {});
-      }
+  const getActiveVideo = useCallback(() => {
+    return videoRefs.current[currentIndex] ?? null;
+  }, [currentIndex]);
+
+  const syncVideos = useCallback(
+    (nextPlaying: boolean) => {
+      videoRefs.current.forEach((video, index) => {
+        if (!video) return;
+
+        if (index === currentIndex) {
+          if (nextPlaying) {
+            const p = video.play();
+            if (p) p.catch(() => {});
+          } else {
+            video.pause();
+          }
+        } else {
+          video.pause();
+        }
+      });
+    },
+    [currentIndex]
+  );
+
+  const togglePlay = useCallback(() => {
+    const activeVideo = getActiveVideo();
+    if (!activeVideo) return;
+
+    if (activeVideo.paused) {
+      const p = activeVideo.play();
+      if (p) p.catch(() => {});
       setIsPlaying(true);
     } else {
-      video.pause();
+      activeVideo.pause();
       setIsPlaying(false);
     }
-  };
+  }, [getActiveVideo]);
 
-  const goPrev = () => {
+  const goPrev = useCallback(() => {
     setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
     setIsPlaying(true);
-  };
+  }, [items.length]);
 
-  const goNext = () => {
+  const goNext = useCallback(() => {
     setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
     setIsPlaying(true);
-  };
+  }, [items.length]);
 
-  const goTo = (index: number) => {
+  const goTo = useCallback((index: number) => {
     setCurrentIndex(index);
     setIsPlaying(true);
-  };
+  }, []);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !currentItem?.video) return;
+    syncVideos(isPlaying);
+  }, [currentIndex, isPlaying, syncVideos]);
 
-    video.currentTime = 0;
-    video.load();
+  useEffect(() => {
+    const nextIndex = (currentIndex + 1) % items.length;
+    const prevIndex = currentIndex === 0 ? items.length - 1 : currentIndex - 1;
 
-    const playPromise = video.play();
-    if (playPromise) {
-      playPromise.catch(() => {});
-    }
-  }, [currentIndex, currentItem?.video]);
+    [currentIndex, nextIndex, prevIndex].forEach((index) => {
+      const video = videoRefs.current[index];
+      if (!video) return;
+
+      video.preload = "auto";
+    });
+  }, [currentIndex, items.length]);
+
   if (!items.length) return null;
 
   return (
     <motion.section
       ref={ref}
       initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ duration: 0.55, ease: "easeOut" }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.45, ease: "easeOut" }}
       className="relative"
     >
-      <div className="sr-only">
-        {items.map(
-          (item, i) =>
-            item.video && (
-              <video key={`preload-${i}`} preload="auto" muted playsInline>
-                <source src={item.video} type="video/mp4" />
-              </video>
-            )
-        )}
-      </div>
-
-      <div
-        className="
-          relative overflow-hidden rounded-[28px]
-          bg-[#F7F6ff]
-          px-5 py-7
-          sm:px-7 sm:py-8
-          md:px-10 md:py-10
-        "
-      >
+      <div className="relative rounded-[28px] border border-[#6D65FF]/10 bg-white px-4 py-6 shadow-[0_18px_40px_rgba(109,101,255,0.08)] sm:px-6 md:px-10 md:py-10">
         <button
           type="button"
           onClick={goPrev}
@@ -220,7 +267,7 @@ function DetailCarousel({
           className="
             absolute left-3 top-1/2 z-20 flex -translate-y-1/2
             h-10 w-10 items-center justify-center rounded-full
-            border-2 border-[#6D65FF]/30 text-[#6D65FF]/60 bg-white
+            border-2 border-[#6D65FF]/30 bg-white text-[#6D65FF]/60
             shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all
             duration-200 hover:border-[#6D65FF]/60 cursor-pointer
             sm:left-5 sm:h-12 sm:w-12
@@ -236,7 +283,7 @@ function DetailCarousel({
           className="
             absolute right-3 top-1/2 z-20 flex -translate-y-1/2
             h-10 w-10 items-center justify-center rounded-full
-            border-2 border-[#6D65FF]/30 text-[#6D65FF]/60 bg-white
+            border-2 border-[#6D65FF]/30 bg-white text-[#6D65FF]/60
             shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all
             duration-200 hover:border-[#6D65FF]/60 cursor-pointer
             sm:right-5 sm:h-12 sm:w-12
@@ -248,28 +295,29 @@ function DetailCarousel({
         {isWeb ? (
           <div className="mx-auto flex w-full max-w-[780px] flex-col items-center gap-8 md:px-8">
             <div className="w-full">
-              <div className="w-full">
-                <div
-                  className="
-                    group relative w-full
-                    rounded-2xl bg-black p-[10px]
-                    shadow-[0_18px_40px_rgba(0,0,0,0.08)]
-                  "
-                >
-                  <div className="flex items-center gap-2 rounded-t-xl bg-neutral-900 px-4 py-3">
-                    <span className="h-3 w-3 rounded-full bg-red-500" />
-                    <span className="h-3 w-3 rounded-full bg-yellow-500" />
-                    <span className="h-3 w-3 rounded-full bg-green-500" />
-                    <div className="ml-3 h-2 w-[180px] rounded-full bg-white/10" />
-                  </div>
+              <div
+                className="
+                  group relative w-full
+                  rounded-2xl bg-black p-[10px]
+                  shadow-[0_18px_40px_rgba(0,0,0,0.08)]
+                "
+              >
+                <div className="flex items-center gap-2 rounded-t-xl bg-neutral-900 px-4 py-3">
+                  <span className="h-3 w-3 rounded-full bg-red-500" />
+                  <span className="h-3 w-3 rounded-full bg-yellow-500" />
+                  <span className="h-3 w-3 rounded-full bg-green-500" />
+                  <div className="ml-3 h-2 w-[180px] rounded-full bg-white/10" />
+                </div>
 
-                  <div className="relative overflow-hidden rounded-b-xl bg-black">
-                    <DeviceVideo
-                      item={currentItem}
-                      videoRef={videoRef}
+                <div className="relative overflow-hidden rounded-b-xl bg-black">
+                  <div className="relative w-full aspect-video">
+                    <DeviceVideoStack
+                      items={items}
+                      currentIndex={currentIndex}
                       isPlaying={isPlaying}
                       togglePlay={togglePlay}
                       variant="mac"
+                      setVideoRef={setVideoRef}
                     />
                   </div>
                 </div>
@@ -297,7 +345,7 @@ function DetailCarousel({
                     {String(currentIndex + 1).padStart(2, "0")}
                   </p>
 
-                  <h3 className="mt-2 text-[24px] font-medium tracking-[-0.02em] text-black text-center md:text-left sm:text-[36px] md:text-[28px]">
+                  <h3 className="mt-2 text-center text-[24px] font-medium tracking-[-0.02em] text-black sm:text-[36px] md:text-left md:text-[28px]">
                     {currentItem.title}
                   </h3>
 
@@ -342,13 +390,16 @@ function DetailCarousel({
                     "
                   >
                     <div className="relative overflow-hidden rounded-[1.8rem] bg-black">
-                      <DeviceVideo
-                        item={currentItem}
-                        videoRef={videoRef}
-                        isPlaying={isPlaying}
-                        togglePlay={togglePlay}
-                        variant="phone"
-                      />
+                      <div className="relative w-full aspect-[9/19.5]">
+                        <DeviceVideoStack
+                          items={items}
+                          currentIndex={currentIndex}
+                          isPlaying={isPlaying}
+                          togglePlay={togglePlay}
+                          variant="phone"
+                          setVideoRef={setVideoRef}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -379,7 +430,15 @@ function DetailCarousel({
                         key={`${currentItem.title}-desc-${i}`}
                         className="leading-relaxed"
                       >
-                        {d}
+                        <BlurHighlight
+                          text={d}
+                          highlights={currentItem.keywords ?? []}
+                          className="leading-relaxed"
+                          blurAmountPx={6}
+                          inactiveOpacity={0.35}
+                          highlightDelay={0.2}
+                          highlightDuration={0.8}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -399,7 +458,7 @@ function DetailCarousel({
                 type="button"
                 aria-label={`Go to slide ${index + 1}`}
                 onClick={() => goTo(index)}
-                className={`h-[4px] rounded-full transition-all duration-300 cursor-pointer ${
+                className={`h-[4px] cursor-pointer rounded-full transition-all duration-300 ${
                   isActive ? "w-14 bg-[#6D65FF]/70" : "w-8 bg-[#6D65FF]/30"
                 }`}
               />
@@ -411,7 +470,7 @@ function DetailCarousel({
   );
 }
 
-export default function ProjectDetailsAuto({
+export default function ProjectMedia({
   items,
   platform,
 }: {
@@ -423,25 +482,6 @@ export default function ProjectDetailsAuto({
 
   return (
     <section id="details" className="scroll-mt-24">
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.6 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="mb-20 text-center"
-      >
-        <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-muted-foreground">
-          Details
-        </p>
-        <h2 className="mx-2 text-2xl font-semibold text-[#6D65FF] sm:text-3xl">
-          Product Walkthrough
-        </h2>
-        <p className="mx-auto mt-3 max-w-md text-xs text-muted-foreground sm:text-sm">
-          A step-by-step look at how the product works through real
-          interactions.
-        </p>
-      </motion.div>
-
       <DetailCarousel items={items} device={isWeb ? "mac" : "phone"} />
     </section>
   );

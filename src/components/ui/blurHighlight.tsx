@@ -8,6 +8,7 @@ type Props = {
   highlights: string[];
 
   highlightColor?: string;
+  highlightTextColor?: string;
   highlightRadiusPx?: number;
   highlightPadXClass?: string;
   highlightPadYClass?: string;
@@ -19,6 +20,7 @@ type Props = {
 
   highlightDelay?: number;
   highlightDuration?: number;
+  textColorDelayOffset?: number;
 
   animateOnce?: boolean;
   className?: string;
@@ -47,11 +49,15 @@ function splitByHighlights(text: string, highlights: string[]): Part[] {
   const chunks = text.split(re);
 
   for (const chunk of chunks) {
-    if (chunk === "") continue;
-    if (highlights.includes(chunk))
+    if (!chunk) continue;
+
+    if (highlights.includes(chunk)) {
       out.push({ type: "hl", value: chunk, index: hlIndex++ });
-    else out.push({ type: "text", value: chunk });
+    } else {
+      out.push({ type: "text", value: chunk });
+    }
   }
+
   return out;
 }
 
@@ -60,8 +66,9 @@ export default function BlurHighlight({
   highlights,
 
   highlightColor = "#6D65FF1A",
-  highlightRadiusPx = 9,
-  highlightPadXClass = "px-2",
+  highlightTextColor = "#6D65FF",
+  highlightRadiusPx = 6,
+  highlightPadXClass = "px-1",
   highlightPadYClass = "",
 
   blurAmountPx = 8,
@@ -69,8 +76,9 @@ export default function BlurHighlight({
   blurDelay = 0,
   blurDuration = 0.8,
 
-  highlightDelay = 0.6,
-  highlightDuration = 1,
+  highlightDelay = 0.7,
+  highlightDuration = 1.2,
+  textColorDelayOffset = 0.2,
 
   animateOnce = true,
   className,
@@ -103,6 +111,9 @@ export default function BlurHighlight({
           return <React.Fragment key={`t-${i}`}>{p.value}</React.Fragment>;
         }
 
+        const baseDelay = highlightDelay + p.index * 1.2;
+        const textDelay = baseDelay + textColorDelayOffset;
+
         return (
           <span key={`h-${i}`} className="relative inline-block">
             <motion.span
@@ -118,16 +129,26 @@ export default function BlurHighlight({
               initial={{ scaleX: 0 }}
               animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
               transition={{
-                delay: highlightDelay + p.index * 0.12,
+                delay: baseDelay,
                 duration: highlightDuration,
                 ease: "easeOut",
               }}
             />
-            <span
+
+            <motion.span
               className={`${highlightPadXClass} ${highlightPadYClass}`.trim()}
+              initial={{ color: "inherit" }}
+              animate={
+                inView ? { color: highlightTextColor } : { color: "inherit" }
+              }
+              transition={{
+                delay: textDelay,
+                duration: 0.45,
+                ease: "easeOut",
+              }}
             >
               {p.value}
-            </span>
+            </motion.span>
           </span>
         );
       })}

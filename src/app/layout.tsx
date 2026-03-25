@@ -1,8 +1,8 @@
 import { Footer } from "@/components/Footer";
-import NavBarServer from "@/components/NavBarServer";
 import type { Metadata } from "next";
 import { DM_Sans, Patrick_Hand } from "next/font/google";
 
+import MyNavBar from "@/components/MyNavBar";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -31,8 +31,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${dmSans.variable} ${patrickHand.variable}`}>
       <body className="overflow-x-hidden">
-        <NavBarServer />
-        {children}
+        <MyNavBar />
+        <main className="pt-12 md:pt-20">{children}</main>
         <Toaster richColors position="top-right" />
         <Footer />
       </body>

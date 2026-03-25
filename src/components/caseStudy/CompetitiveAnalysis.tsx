@@ -24,7 +24,7 @@ const competitors = [
   },
   {
     name: "SkilledTradesBC",
-    x: 28,
+    x: 18,
     y: 20,
     logo: "/images/forge/skilledtradesbc.png",
     width: 190,
@@ -59,7 +59,7 @@ const competitors = [
   },
 ];
 
-export default function ForgeCompetitiveAnalysis() {
+export default function CompetitiveAnalysis() {
   return (
     <div className="mx-auto max-w-6xl">
       <motion.div
