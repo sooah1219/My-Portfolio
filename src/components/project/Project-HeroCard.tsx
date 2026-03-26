@@ -30,7 +30,6 @@ export default function ProjectHeroCard({ project }: ProjectHeroCardProps) {
 
   return (
     <Card className="mb-26 overflow-hidden border border-[#6D65FF] bg-card/80 pb-5 shadow-[0_0_15px_3px_#6D65FF]/30">
-      {/* IMAGE */}
       <div className="relative">
         <div className="relative mb-3 overflow-hidden rounded-xl sm:mt-8 md:mb-6">
           {project.images?.[0] && (
@@ -41,7 +40,6 @@ export default function ProjectHeroCard({ project }: ProjectHeroCardProps) {
                     <div className="group relative rounded-[28px] border border-white/10 bg-[#111] p-3 transition-transform duration-500 [transform:rotateX(6deg)] hover:[transform:rotateX(0deg)_translateY(-4px)] sm:p-4">
                       <div className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-white/10" />
 
-                      {/* browser bar */}
                       <div className="mb-3 overflow-hidden rounded-[18px] border border-white/10 bg-[#2b2727] sm:mb-4">
                         <div className="flex items-center gap-2 px-4 py-3 sm:px-5">
                           <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
