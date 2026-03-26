@@ -250,6 +250,7 @@ function DetailCarousel({
   }, [currentIndex, items.length]);
 
   if (!items.length) return null;
+  const hasMultiple = items.length > 1;
 
   return (
     <motion.section
@@ -260,37 +261,41 @@ function DetailCarousel({
       className="relative"
     >
       <div className="relative rounded-[28px] border border-[#6D65FF]/10 bg-white px-4 py-6 shadow-[0_18px_40px_rgba(109,101,255,0.08)] sm:px-6 md:px-10 md:py-10">
-        <button
-          type="button"
-          onClick={goPrev}
-          aria-label="Previous"
-          className="
-            absolute left-3 top-1/2 z-20 flex -translate-y-1/2
-            h-10 w-10 items-center justify-center rounded-full
-            border-2 border-[#6D65FF]/30 bg-white text-[#6D65FF]/60
-            shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all
-            duration-200 hover:border-[#6D65FF]/60 cursor-pointer
-            sm:left-5 sm:h-12 sm:w-12
-          "
-        >
-          <ChevronLeft className="h-5 w-5 sm:h-7 sm:w-7" />
-        </button>
+        {hasMultiple && (
+          <>
+            <button
+              type="button"
+              onClick={goPrev}
+              aria-label="Previous"
+              className="
+        absolute left-3 top-1/2 z-20 flex -translate-y-1/2
+        h-10 w-10 items-center justify-center rounded-full
+        border-2 border-[#6D65FF]/30 bg-white text-[#6D65FF]/60
+        shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all
+        duration-200 hover:border-[#6D65FF]/60 cursor-pointer
+        sm:left-5 sm:h-12 sm:w-12
+      "
+            >
+              <ChevronLeft className="h-5 w-5 sm:h-7 sm:w-7" />
+            </button>
 
-        <button
-          type="button"
-          onClick={goNext}
-          aria-label="Next"
-          className="
-            absolute right-3 top-1/2 z-20 flex -translate-y-1/2
-            h-10 w-10 items-center justify-center rounded-full
-            border-2 border-[#6D65FF]/30 bg-white text-[#6D65FF]/60
-            shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all
-            duration-200 hover:border-[#6D65FF]/60 cursor-pointer
-            sm:right-5 sm:h-12 sm:w-12
-          "
-        >
-          <ChevronRight className="h-5 w-5 sm:h-7 sm:w-7" />
-        </button>
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label="Next"
+              className="
+        absolute right-3 top-1/2 z-20 flex -translate-y-1/2
+        h-10 w-10 items-center justify-center rounded-full
+        border-2 border-[#6D65FF]/30 bg-white text-[#6D65FF]/60
+        shadow-[0_0_5px_3px_#6D65FF]/10 backdrop-blur transition-all
+        duration-200 hover:border-[#6D65FF]/60 cursor-pointer
+        sm:right-5 sm:h-12 sm:w-12
+      "
+            >
+              <ChevronRight className="h-5 w-5 sm:h-7 sm:w-7" />
+            </button>
+          </>
+        )}
 
         {isWeb ? (
           <div className="mx-auto flex w-full max-w-[780px] flex-col items-center gap-8 md:px-8">
