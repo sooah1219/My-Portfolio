@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 import CompetitiveAnalysis from "./CompetitiveAnalysis";
 import DetailSection from "./DetailSection";
+import ForgePersonaSection from "./ForgePersonaSection";
 import FutureImprovementsSection from "./FutureImprovementsSection";
 import SectionHeader from "./SectionHeader";
 import WhyBuiltSection from "./WhyBuiltSection";
@@ -161,6 +162,19 @@ export default function ProjectCaseStudy({
               problem_intro={problem_intro}
               problem_metrics={problem_metrics}
             />
+            {isForge && hasWhyBuilt && (
+              <>
+                <SectionDivider />
+
+                <SectionHeader
+                  label="Target Users"
+                  title="User Personas"
+                  description="Detailed user profiles showing the real needs, motivations, and challenges that directly shaped Forge’s product decisions."
+                />
+
+                <ForgePersonaSection />
+              </>
+            )}
           </>
         )}
 
@@ -199,14 +213,6 @@ export default function ProjectCaseStudy({
               imageSrc="/images/styleGuide.png"
               imageAlt="Forge Style"
               padded
-            />
-
-            <ImageSection
-              label="Target Users"
-              title="User Persona"
-              description="A detailed representation of the primary users, their needs, motivations, and challenges that guided product decisions."
-              imageSrc="/images/forge/user.png"
-              imageAlt="Forge User"
             />
 
             <ImageSection
